@@ -1,0 +1,1376 @@
+/* ==========================================================================
+   #UPWAN — Pawan & Upasana wedding invitation
+   Envelope opening intro + scroll-snap ceremony scenes
+   ========================================================================== */
+
+:root {
+  /* Accent gold — swap for a different shade, options used in the original design:
+     #D4AF37 (default), #C9A227, #E8C77E, #B7935A */
+  --accent: #D4AF37;
+  --accent-soft: rgba(212, 175, 55, 0.35);
+  --cream: #f6ead0;
+
+  /* Envelope tone — "Deep Red" (default). To use "Deep Green" instead, swap these
+     three variables for the values in the commented block below. */
+  --envelope-deep: #3a0d13;
+  --envelope-bg: radial-gradient(circle at 50% 0%, #7a1f2c, #4a1018 70%);
+  --flap-bg: linear-gradient(200deg, #8a2432, #4d1017);
+
+  /*
+  Deep Green alternative:
+  --envelope-deep: #0c261c;
+  --envelope-bg: radial-gradient(circle at 50% 0%, #1f4a37, #102a1f 70%);
+  --flap-bg: linear-gradient(200deg, #235a42, #0f2c20);
+  */
+
+  /* Layered Botanical theme palette — marigold, rose, jasmine, lotus + rose-gold foil */
+  --marigold: #f6a623;
+  --rose: #e0728f;
+  --jasmine: #fff8ec;
+  --lotus: #d98fc0;
+  --rose-gold: linear-gradient(135deg, #f7d9b4, #e0a978 50%, #b9793f);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background: #e9e2d2;
+  font-family: 'Jost', sans-serif;
+  color: var(--cream);
+}
+
+h1, h2, h3, p {
+  margin: 0;
+}
+
+/* ==========================================================================
+   Layout shell
+   ========================================================================== */
+
+.app-shell {
+  min-height: 100vh;
+  width: 100%;
+  background: var(--envelope-deep);
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+/* Temple garland canopy — a dense two-tier marigold + jasmine swag pinned
+   across every Page 2 scene, the way garlands are strung between pillars at
+   a mandap. A soft warm glow spills down from it like light under a temple
+   canopy. Replaces the earlier thin single-line toran. */
+.temple-canopy {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  height: 76px;
+  z-index: 60;
+  pointer-events: none;
+}
+.temple-canopy::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 90' width='160' height='90' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 6 Q 40 58 80 6 Q 120 58 160 6' fill='none' stroke='%23fff3d2' stroke-width='9' stroke-linecap='round' stroke-dasharray='2 6'/%3E%3Cpath d='M0 13 Q 40 78 80 13 Q 120 78 160 13' fill='none' stroke='%23e2660f' stroke-width='10' stroke-linecap='round' stroke-dasharray='2 6'/%3E%3Cpath d='M0 13 Q 40 78 80 13 Q 120 78 160 13' fill='none' stroke='%23ffc93c' stroke-width='4' stroke-linecap='round' stroke-dasharray='2 6'/%3E%3Cpolygon points='40,52 47,72 33,72' fill='%232e7d4f'/%3E%3Cpolygon points='120,52 127,72 113,72' fill='%232e7d4f'/%3E%3Ccircle cx='40' cy='80' r='6' fill='%23a51d3a'/%3E%3Ccircle cx='120' cy='80' r='6' fill='%23a51d3a'/%3E%3Cpolygon points='0,4 6,20 -6,20' fill='%232e7d4f'/%3E%3Cpolygon points='80,4 86,20 74,20' fill='%232e7d4f'/%3E%3Cpolygon points='160,4 166,20 154,20' fill='%232e7d4f'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: 108px 68px;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.35));
+}
+.temple-canopy::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 220px;
+  background: radial-gradient(ellipse at 50% 0%, rgba(255, 214, 130, 0.28), transparent 72%);
+}
+
+/* Hanging lantern strings down both edges — pinned across every Page 2
+   scene, like a mandap's diya lights. Each `.lantern` is a chain (::before)
+   + glowing brass body (::after) that flickers gently. */
+.lantern-rail {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  height: 100vh;
+  z-index: 55;
+  pointer-events: none;
+}
+.lantern-string { position: absolute; top: 0; width: 30px; height: 100%; }
+.lantern-string.left { left: 2px; }
+.lantern-string.right { right: 2px; }
+.lantern { position: absolute; left: 50%; width: 20px; height: 24px; transform: translateX(-50%); }
+.lantern::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -22px;
+  width: 1px;
+  height: 22px;
+  background: linear-gradient(rgba(212, 175, 55, 0), rgba(212, 175, 55, 0.6));
+  transform: translateX(-50%);
+}
+.lantern::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 7px 7px 11px 11px;
+  background: radial-gradient(circle at 38% 28%, #ffedb0, var(--accent) 60%, #6e4f11 100%);
+  box-shadow: 0 0 12px rgba(255, 205, 90, 0.65), inset 0 -4px 6px rgba(0, 0, 0, 0.25);
+  animation: flicker 2.4s ease-in-out infinite;
+  animation-delay: var(--flicker-delay, 0s);
+}
+
+.card {
+  width: 100%;
+  max-width: 480px;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: var(--envelope-bg);
+}
+
+.hidden { display: none !important; }
+
+/* ==========================================================================
+   PAGE 1 — envelope
+   ========================================================================== */
+
+.page1 {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  perspective: 2000px;
+}
+
+/* deckle border frame + corner ticks */
+.deckle-border {
+  position: absolute;
+  inset: 16px;
+  border: 1px solid var(--accent-soft);
+  pointer-events: none;
+}
+.corner {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  pointer-events: none;
+}
+.corner-tl { top: 30px; left: 30px; border-top: 1.5px solid var(--accent); border-left: 1.5px solid var(--accent); }
+.corner-tr { top: 30px; right: 30px; border-top: 1.5px solid var(--accent); border-right: 1.5px solid var(--accent); }
+.corner-bl { bottom: 30px; left: 30px; border-bottom: 1.5px solid var(--accent); border-left: 1.5px solid var(--accent); }
+.corner-br { bottom: 30px; right: 30px; border-bottom: 1.5px solid var(--accent); border-right: 1.5px solid var(--accent); }
+
+.envelope-flap {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 60%;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  background: var(--flap-bg);
+  transform-origin: top center;
+  transform-style: preserve-3d;
+  box-shadow: inset 0 -40px 60px -30px rgba(0, 0, 0, 0.35);
+  transition: box-shadow 2.08s ease;
+}
+.envelope-flap.opened {
+  animation: flapOpen 2.08s linear forwards;
+  box-shadow: inset 0 -60px 90px -30px rgba(0, 0, 0, 0.5);
+}
+
+.envelope-glow {
+  position: absolute;
+  top: 52%; left: 50%;
+  width: 240px; height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 222, 150, 0.6), transparent 70%);
+  filter: blur(10px);
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.7);
+  transition: opacity 2.08s ease 0.1s, transform 2.08s ease 0.1s;
+}
+.envelope-glow.opened {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+.page1-content {
+  position: absolute;
+  top: 60%; left: 0; right: 0; bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 24px 32px;
+}
+
+.seal-wrap {
+  position: relative;
+  flex: none;
+  margin-top: -56px;
+  width: 112px;
+  height: 112px;
+}
+
+.seal-halo {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 130px; height: 130px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 215, 140, 0.4), transparent 70%);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: haloBreathe 2.6s ease-in-out infinite;
+}
+.seal-halo.cracking { animation: none; opacity: 0; transition: opacity 0.2s ease; }
+
+.seal-burst {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 112px; height: 112px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+}
+.seal-burst.cracking { animation: burstPulse 1.3s ease-out 0.12s forwards; }
+
+.seal-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.seal-particle {
+  position: absolute;
+  bottom: 50%;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+  pointer-events: none;
+}
+
+.seal-btn {
+  position: absolute;
+  inset: 0;
+  width: 112px;
+  height: 112px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 5;
+}
+.seal-btn.cracking {
+  animation: sealGlow 1s ease-out 0.15s forwards;
+  pointer-events: none;
+}
+
+.seal-face {
+  width: 112px; height: 112px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 26%, #f6e3a3, var(--accent) 55%, #6e4f11 100%);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4), inset 0 0 0 3px rgba(255, 255, 255, 0.22), inset 0 -8px 14px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.seal-ring {
+  width: 88px; height: 88px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(90, 64, 10, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.seal-label {
+  font: 600 16px 'Cormorant Garamond', serif;
+  letter-spacing: 0.14em;
+  color: #5a4009;
+}
+.seal-crack {
+  position: absolute;
+  height: 1.5px;
+  background: rgba(90, 64, 10, 0.55);
+  opacity: 0;
+}
+.crack-1 { top: 16%; left: 22%; width: 60%; transform: rotate(38deg); }
+.crack-2 { top: 52%; left: 14%; width: 50%; transform: rotate(-24deg); }
+.seal-crack.show.crack-1 { animation: crackFade 0.25s ease-out forwards; }
+.seal-crack.show.crack-2 { animation: crackFade 0.25s ease-out 0.06s forwards; }
+
+.page1-title {
+  flex: none;
+  margin-top: 20px;
+  text-align: center;
+}
+.eyebrow {
+  margin: 0;
+  font: 600 13px 'Jost', sans-serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.page1-title h1 {
+  margin: 10px 0 0;
+  font: 600 44px 'Cormorant Garamond', serif;
+  color: var(--cream);
+}
+.page1-spacer { flex: 1 1 auto; min-height: 12px; }
+.page1-hint {
+  flex: none;
+  text-align: center;
+  margin: 0;
+  font: 400 12.5px 'Jost', sans-serif;
+  color: rgba(246, 234, 208, 0.65);
+  transition: opacity 0.3s ease;
+}
+.page1-hint.fade { opacity: 0; }
+
+/* ==========================================================================
+   Falling petals (shower on open) + greeting overlay
+   ========================================================================== */
+
+.petal-shower {
+  position: fixed;
+  inset: 0;
+  z-index: 65;
+  pointer-events: none;
+  overflow: hidden;
+}
+.petal {
+  position: absolute;
+  top: -8vh;
+  border-radius: 50% 0 50% 50%;
+  opacity: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.greeting-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 66;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  animation: greetingIn 0.7s ease-out forwards;
+}
+.greeting-overlay.fade-out {
+  opacity: 0;
+  transform: translateY(-14px);
+  transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+  animation: none;
+}
+.greeting-overlay p {
+  font: 600 12px 'Jost', sans-serif;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-align: center;
+}
+.greeting-overlay h2 {
+  margin: 10px 0 0;
+  font: 600 38px 'Cormorant Garamond', serif;
+  color: var(--cream);
+  text-align: center;
+}
+
+/* Congratulations celebration — shown when all 3 date tiles are scratched, or
+   the guest scrolls past without scratching (tiles auto-reveal either way).
+   No modal/card: four party-poppers fire from the screen's corners (a real
+   burst-then-fall arc, not confetti drifting down from the top like rain),
+   with a message that bounces in — a celebration, not a dialog.
+
+   `.congrats-text` centers via the parent flexbox, not a transform, on
+   purpose: the bounce-in/out keyframes below animate `transform`, and an
+   active animation on a property fully overrides any static value for that
+   same property on the same element (the bug already hit twice this build
+   with the bouquets and the mandala) — so centering can't live in a
+   `transform: translate(-50%,-50%)` here either. */
+.congrats-celebration {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  pointer-events: none;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.congrats-confetti-layer { position: absolute; inset: 0; }
+.congrats-confetti-piece {
+  position: absolute;
+  opacity: 0;
+  animation: popperFly var(--fly-dur, 2s) cubic-bezier(0.2, 0.7, 0.4, 1) var(--fly-delay, 0s) forwards;
+}
+.congrats-confetti-piece.petal { border-radius: 50% 0 50% 50%; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); }
+.congrats-confetti-piece.dot { border-radius: 50%; box-shadow: 0 0 6px rgba(255, 220, 140, 0.7); }
+.congrats-confetti-piece.diamond { box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); }
+
+.congrats-text {
+  position: relative;
+  text-align: center;
+  opacity: 0;
+  transform: scale(0.3) rotate(-8deg);
+}
+.congrats-text.show {
+  animation: congratsBounceIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s forwards,
+             congratsOut 0.5s ease-in 3.4s forwards;
+}
+.congrats-text .congrats-flowers { font-size: 22px; letter-spacing: 8px; }
+.congrats-text h2 {
+  margin-top: 8px;
+  font: 600 34px 'Cormorant Garamond', serif;
+  color: var(--cream);
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+}
+.congrats-text p {
+  margin-top: 8px;
+  font: 500 14px 'Jost', sans-serif;
+  color: var(--cream);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes popperFly {
+  0% { opacity: 0; transform: translate(0, 0) rotate(0deg) scale(0.4); }
+  10% { opacity: 1; }
+  45% { transform: translate(var(--bx), var(--by)) rotate(var(--rot1)) scale(1); }
+  100% { opacity: 0; transform: translate(var(--fx), var(--fy)) rotate(var(--rot2)) scale(0.85); }
+}
+@keyframes congratsBounceIn { 0% { opacity: 0; transform: scale(0.3) rotate(-8deg); } 100% { opacity: 1; transform: scale(1) rotate(0deg); } }
+
+@keyframes congratsOut { to { opacity: 0; transform: scale(1) translateY(-16px); } }
+
+/* ==========================================================================
+   PAGE 2 — scroll-snap ceremony scenes
+   ========================================================================== */
+
+.page2 {
+  height: 100vh;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  position: relative;
+  animation: fadein 0.6s ease;
+}
+
+.back-btn {
+  position: fixed;
+  top: 84px; left: 18px;
+  z-index: 80;
+  font: 600 11px 'Jost', sans-serif;
+  color: var(--cream);
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 8px 14px;
+  cursor: pointer;
+  backdrop-filter: blur(3px);
+}
+
+/* Side dot-nav — one dot per scene, filled in by JS (so it always matches
+   the actual scene count), highlighting whichever scene is in view. */
+.scene-dots {
+  position: fixed;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.scene-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+.scene-dot.active {
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+  transform: scale(1.6);
+}
+
+.scene {
+  scroll-snap-align: start;
+  width: 100%;
+  height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+  /* Without its own stacking context, every negative-z-index decoration below
+     (lotus, mandala-glow, bg bouquets, the ::before lamplight wash) escapes
+     past this element to the scroll container's stacking context and paints
+     BEHIND this scene's own background instead of in front of it — making it
+     invisible. `isolation: isolate` gives .scene a stacking context of its
+     own so those children stay local and layer correctly above its background. */
+  isolation: isolate;
+}
+/* A warm glow spilling in from the top of every scene, like temple lamplight —
+   ties the ceremonies together into one lit world instead of five unrelated
+   backgrounds. Each scene keeps its own base color; this just warms it. */
+.scene::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 8%, rgba(255, 196, 110, 0.22), transparent 55%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.scene-eyebrow {
+  font: 600 12px 'Jost', sans-serif;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.scene-title {
+  font: 600 34px 'Cormorant Garamond', serif;
+}
+.scene-date {
+  font: 500 15px 'Cormorant Garamond', serif;
+}
+.scene-title-hindi {
+  font-size: 17px;
+  opacity: 0.85;
+  margin-top: -6px;
+}
+
+/* Decorative flourish that replaces plain "Ceremony One/Two/…" labels */
+.title-flourish {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+.title-flourish .fl-line {
+  width: 32px;
+  height: 1px;
+  background: var(--rose-gold);
+}
+.title-flourish .fl-mark {
+  font-size: 17px;
+  line-height: 1;
+  color: var(--marigold);
+  filter: drop-shadow(0 0 4px rgba(246, 166, 35, 0.5));
+}
+.title-flourish .fl-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--marigold);
+  box-shadow: 0 0 5px var(--marigold);
+}
+
+/* Scroll-triggered entrance — scenes feel alive as you scroll through them */
+.scene .invocation,
+.scene .kalash,
+.scene .title-flourish,
+.scene .scene-title,
+.scene .scene-date,
+.scene .media-slot,
+.scene .savedate,
+.scene .story-timeline,
+.scene .countdown,
+.scene .itinerary,
+.scene .thankyou-text,
+.scene .thankyou-signoff {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.scene.in-view .invocation { opacity: 1; transform: translateY(0); transition-delay: 0s; }
+.scene.in-view .kalash { opacity: 1; transform: translateY(0); transition-delay: 0s; }
+.scene.in-view .title-flourish { opacity: 1; transform: translateY(0); transition-delay: 0s; }
+.scene.in-view .scene-title { opacity: 1; transform: translateY(0); transition-delay: 0.08s; }
+.scene.in-view .media-slot { opacity: 1; transform: translateY(0); transition-delay: 0.16s; }
+.scene.in-view .savedate { opacity: 1; transform: translateY(0); transition-delay: 0.18s; }
+.scene.in-view .scene-date { opacity: 1; transform: translateY(0); transition-delay: 0.32s; }
+.scene.in-view .story-timeline { opacity: 1; transform: translateY(0); transition-delay: 0.16s; }
+.scene.in-view .countdown { opacity: 1; transform: translateY(0); transition-delay: 0.14s; }
+.scene.in-view .itinerary { opacity: 1; transform: translateY(0); transition-delay: 0.26s; }
+.scene.in-view .thankyou-text { opacity: 1; transform: translateY(0); transition-delay: 0.14s; }
+.scene.in-view .thankyou-signoff { opacity: 1; transform: translateY(0); transition-delay: 0.26s; }
+
+/* Ganesh invocation + hosting family — restores the traditional opening line
+   that got replaced by the scratch cards below, without undoing that feature. */
+.invocation { text-align: center; margin-bottom: 2px; }
+.invocation-om {
+  display: block;
+  font-size: 30px;
+  line-height: 1;
+  color: var(--accent);
+  text-shadow: 0 0 14px rgba(212, 175, 55, 0.65);
+  margin-bottom: 6px;
+}
+.invocation-line {
+  font: 500 15px 'Cormorant Garamond', serif;
+  color: var(--cream);
+  letter-spacing: 0.02em;
+}
+.invocation-hosts {
+  margin-top: 6px;
+  font: 400 11px 'Jost', sans-serif;
+  color: rgba(246, 234, 208, 0.7);
+  line-height: 1.5;
+}
+
+/* --- Welcome scene: Save the Date scratch cards --- */
+.scene-welcome { background: var(--envelope-bg); }
+.scene-welcome .scene-eyebrow { color: var(--accent); }
+.scene-welcome .scene-title { color: var(--cream); text-align: center; font-size: 34px; }
+.scene-welcome .scroll-hint {
+  position: relative;
+  margin-top: 6px;
+  font: 400 11px 'Jost', sans-serif;
+  color: rgba(246, 234, 208, 0.45);
+}
+
+.savedate { position: relative; width: 100%; max-width: 340px; text-align: center; }
+.savedate-label {
+  font: 600 13px 'Jost', sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+.scratch-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.scratch-tile {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(247, 217, 180, 0.4);
+}
+.scratch-reveal {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 30%, #4a1018, #24040a 85%);
+}
+.scratch-reveal .reveal-main {
+  font: 600 15px 'Cormorant Garamond', serif;
+  color: var(--cream);
+  letter-spacing: 0.03em;
+}
+.scratch-reveal .reveal-sub {
+  font: 400 10.5px 'Jost', sans-serif;
+  color: rgba(246, 234, 208, 0.65);
+  margin-top: 3px;
+}
+.scratch-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  touch-action: none;
+  transition: opacity 0.3s ease;
+}
+.scratch-canvas:active { cursor: grabbing; }
+.scratch-canvas.done { pointer-events: none; }
+.savedate-hint {
+  margin-top: 14px;
+  font: 400 11.5px 'Jost', sans-serif;
+  font-style: italic;
+  color: rgba(246, 234, 208, 0.55);
+}
+.ring-orbit {
+  position: absolute;
+  left: 50%; top: 42%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.ring-orbit.outer { width: 220px; height: 220px; border: 1px dashed rgba(212, 175, 55, 0.3); }
+.ring-orbit.inner { width: 160px; height: 160px; border: 1px dotted rgba(212, 175, 55, 0.35); }
+.sparkle {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: sparkleTwinkle 2.8s ease-in-out infinite;
+}
+
+/* --- Haldi scene --- */
+.scene-haldi { background: linear-gradient(160deg, #fbd873, #f6b93b 55%, #e2660f); --glow-color: #ffdf6b; }
+.scene-haldi .title-flourish .fl-line { background: linear-gradient(90deg, transparent, #5c3300, transparent); }
+.scene-haldi .scene-title { color: #4a2a00; }
+.scene-haldi .scene-title-hindi { color: #5c3300; }
+.scene-haldi .scene-date { color: #4a2a00; }
+.diya {
+  width: 38px; height: 38px;
+  position: relative;
+  margin-bottom: 4px;
+}
+.diya-base {
+  position: absolute; left: 50%; bottom: 0;
+  transform: translateX(-50%);
+  width: 18px; height: 7px;
+  background: #7a4d10;
+  border-radius: 2px;
+}
+.diya-flame {
+  position: absolute; left: 50%; bottom: 6px;
+  transform: translateX(-50%);
+  width: 16px; height: 24px;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: radial-gradient(circle at 50% 30%, #fff3c4, #ffdf6b 60%, #e2660f);
+  box-shadow: 0 0 16px rgba(255, 223, 107, 0.85);
+  animation: flicker 1.5s ease-in-out infinite;
+}
+
+/* A row of small oil lamps along the base of every scene — the temple-floor
+   diya line from the reference. Reuses .diya-base/.diya-flame, just smaller.
+   Kept in normal flex flow (not absolute) so it always lands below the date
+   text instead of floating over it when a scene's content runs tall. */
+.diya-row {
+  display: flex;
+  gap: 20px;
+  align-items: flex-end;
+  pointer-events: none;
+}
+.diya-row .diya-mini { position: relative; width: 22px; height: 22px; }
+.diya-row .diya-mini .diya-base { width: 12px; height: 5px; }
+.diya-row .diya-mini .diya-flame { width: 10px; height: 15px; bottom: 4px; box-shadow: 0 0 10px rgba(255, 223, 107, 0.8); }
+
+/* A small lotus blossom (5 petals radiating from a point) with a soft blurred
+   "reflection" blob beneath it, evoking flowers floating on temple water. */
+.lotus { position: absolute; width: 44px; height: 44px; pointer-events: none; z-index: -1; }
+.lotus .petal {
+  position: absolute;
+  width: 22px; height: 16px;
+  left: 11px; top: 14px;
+  border-radius: 50% 0 50% 50%;
+  background: radial-gradient(circle at 30% 30%, #fff, var(--lotus) 75%);
+  transform-origin: 0 100%;
+  opacity: 0.75;
+}
+.lotus .petal:nth-child(1) { transform: rotate(0deg); }
+.lotus .petal:nth-child(2) { transform: rotate(72deg); }
+.lotus .petal:nth-child(3) { transform: rotate(144deg); }
+.lotus .petal:nth-child(4) { transform: rotate(216deg); }
+.lotus .petal:nth-child(5) { transform: rotate(288deg); }
+/* The venue scene's own height varies with its content (photo + button +
+   RSVP form), so a lotus positioned by percentage against the scene's box
+   could land anywhere — including behind the form. Anchoring it inside the
+   fixed-size media-slot instead, bleeding under its corners the same way
+   .bouquet.frame-* already does, makes its position deterministic. */
+.media-slot .lotus { z-index: 2; }
+.media-slot .lotus.frame-lotus-l { left: 6%; bottom: -18px; }
+.media-slot .lotus.frame-lotus-r { right: 6%; bottom: -18px; }
+.lotus::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 36px;
+  height: 14px;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse, rgba(127, 191, 174, 0.4), transparent 75%);
+  filter: blur(2px);
+}
+
+/* --- Sangeet scene --- */
+.scene-sangeet { background: linear-gradient(160deg, #8b2a52, #4a1030 70%); --glow-color: #e05a9c; }
+.scene-sangeet .title-flourish .fl-line { background: linear-gradient(90deg, transparent, #f0c8dc, transparent); }
+.scene-sangeet .scene-title { color: #fbeaf3; }
+.scene-sangeet .scene-title-hindi { color: #f0c8dc; }
+.scene-sangeet .scene-date { color: #fbeaf3; }
+.drift-petal {
+  position: absolute;
+  border-radius: 50% 0 50% 50%;
+  background: rgba(255, 255, 255, 0.3);
+  animation: driftPetal 3s ease-in-out infinite;
+}
+
+/* A pair of peacock feathers flanking the Sangeet title — the peacock is the
+   traditional symbol for music, dance and grace, so it belongs to this
+   ceremony specifically rather than the general theme. Same "static
+   transform + SVG data-URI" recipe as the other motifs in this file. */
+.peacock-feather {
+  position: absolute;
+  top: 9%;
+  width: 48px;
+  height: 128px;
+  pointer-events: none;
+  opacity: 0.6;
+  z-index: -1;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+}
+.peacock-feather::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 60 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 2 C50 32 56 94 30 156 C4 94 10 32 30 2 Z' fill='%231f6e5c'/%3E%3Cpath d='M30 2 C50 32 56 94 30 156 C4 94 10 32 30 2 Z' fill='none' stroke='%230d3d33' stroke-width='1.5' opacity='0.45'/%3E%3Cellipse cx='30' cy='58' rx='17' ry='23' fill='%230a2e46'/%3E%3Cellipse cx='30' cy='58' rx='12' ry='17' fill='%231f8ca3'/%3E%3Cellipse cx='30' cy='58' rx='6' ry='10' fill='%230a1f3d'/%3E%3Cellipse cx='26' cy='50' rx='2.4' ry='3.4' fill='%23fff' opacity='0.55'/%3E%3Cline x1='30' y1='156' x2='30' y2='160' stroke='%233a5a2e' stroke-width='2'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.peacock-feather.pf-left { left: 5%; transform: rotate(-16deg); }
+.peacock-feather.pf-right { right: 5%; transform: rotate(16deg) scaleX(-1); }
+
+/* --- Shubh Vivah scene --- */
+.scene-vivah { background: var(--envelope-bg); --glow-color: var(--accent); }
+.scene-vivah .title-flourish .fl-line { background: var(--rose-gold); }
+.scene-vivah .scene-title { color: var(--cream); }
+.scene-vivah .scene-title-hindi { color: #e8d3a3; }
+.scene-vivah .scene-date { color: var(--cream); }
+.ring-orbit.vivah-outer { top: 50%; width: 260px; height: 260px; border: 1px dashed rgba(212, 175, 55, 0.28); animation: ringPulse 3s ease-in-out infinite; }
+.ring-orbit.vivah-inner { top: 50%; width: 200px; height: 200px; border: 1px dotted rgba(212, 175, 55, 0.3); }
+
+/* A kalash (sacred pot, mango leaves, coconut) above the main ceremony's
+   title — traditionally marks an auspicious beginning, so it belongs here
+   rather than spread across every scene. A single in-flow icon, not an
+   absolutely-positioned overlay, since there's only ever one kalash. */
+.kalash {
+  width: 66px;
+  height: 90px;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 80 130' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 34 L20 20 Q28 32 40 34 Z' fill='%232e7d4f'/%3E%3Cpath d='M40 34 L30 12 Q36 26 40 34 Z' fill='%233a9c63'/%3E%3Cpath d='M40 34 L40 8 Q42 24 40 34 Z' fill='%232e7d4f'/%3E%3Cpath d='M40 34 L50 12 Q44 26 40 34 Z' fill='%233a9c63'/%3E%3Cpath d='M40 34 L60 20 Q52 32 40 34 Z' fill='%232e7d4f'/%3E%3Ccircle cx='40' cy='14' r='11' fill='%238a5a2e'/%3E%3Cpath d='M32 10 Q40 18 48 10' stroke='%235c3a1e' stroke-width='1.2' fill='none'/%3E%3Crect x='33' y='34' width='14' height='22' rx='4' fill='%23c9862f'/%3E%3Cellipse cx='40' cy='34' rx='9' ry='4' fill='%23e0a24a'/%3E%3Cpath d='M33 60 Q40 64 47 60' stroke='%23c0392b' stroke-width='2' fill='none'/%3E%3Cpath d='M20 66 Q10 90 20 112 Q40 124 60 112 Q70 90 60 66 Q66 60 60 54 L20 54 Q14 60 20 66 Z' fill='%23c9862f'/%3E%3Cellipse cx='40' cy='54' rx='20' ry='6' fill='%23e0a24a'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.35));
+}
+
+/* --- Reception scene --- */
+.scene-reception { background: linear-gradient(160deg, #f3e0c8, #d9b877); --glow-color: var(--accent); }
+.scene-reception .title-flourish .fl-line { background: linear-gradient(90deg, transparent, #8a6d1f, transparent); }
+.scene-reception .scene-title { color: #3a2e10; }
+.scene-reception .scene-title-hindi { color: #8a6d1f; }
+.scene-reception .scene-date { color: #3a2e10; }
+.bloom {
+  width: 18px; height: 18px;
+  border-radius: 50% 0 50% 50%;
+  background: radial-gradient(circle at 35% 30%, #fff, var(--accent) 70%);
+  transform: rotate(45deg);
+  margin-bottom: 4px;
+}
+
+/* --- Media slots (ceremony photo/video placeholders) ---
+   Layered Botanical: a soft ambient blur of the scene's accent color behind
+   the frame, a thin rose-gold hairline ring, and marigold/rose/jasmine
+   bouquets layered over two opposite corners. */
+.media-slot {
+  position: relative;
+  width: 100%;
+  margin-top: 60px;
+  isolation: isolate;
+}
+.media-slot::before {
+  content: '';
+  position: absolute;
+  inset: -16%;
+  border-radius: inherit;
+  background: radial-gradient(circle, var(--glow-color, var(--accent)) 0%, transparent 68%);
+  filter: blur(34px);
+  opacity: 0.5;
+  z-index: 0;
+  pointer-events: none;
+  animation: glowPulse 4.6s ease-in-out infinite;
+}
+
+.media-slot.rect { max-width: 300px; aspect-ratio: 4 / 3; --slot-radius: 28px; }
+.media-slot.tall { max-width: 240px; aspect-ratio: 3 / 4; --slot-radius: 28px; }
+.media-slot.round { max-width: 230px; aspect-ratio: 1 / 1; --slot-radius: 50%; }
+.media-slot.arch { max-width: 300px; aspect-ratio: 4 / 3; --slot-radius: 30% 30% 16px 16px; }
+
+.media-slot-placeholder {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: var(--slot-radius, 28px);
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1.5px rgba(247, 217, 180, 0.55);
+  animation: kenburns 15s ease-in-out infinite alternate;
+}
+.media-slot video,
+.media-slot img {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--slot-radius, 28px);
+  box-shadow: inset 0 0 0 1.5px rgba(247, 217, 180, 0.55);
+  animation: kenburns 15s ease-in-out infinite alternate;
+}
+
+/* --- Floral bouquets (Layered Botanical) ---
+   Reusable 5-petal cluster used as scene-level background accents —
+   `.bouquet.bg-*` a large, dim pair in the scene's own corners, `.bouquet.mid-*`
+   a smaller pair at the vertical mid-sides. (Photo frames get their florals
+   from the temple-garland/pillar/medallion trio below instead.)
+
+   The gentle drift-bob animation lives on `.bouquet-inner`, not `.bouquet`
+   itself — a running CSS animation on `transform` fully overrides any static
+   `transform` on the same element, which would otherwise silently cancel the
+   mirroring/scaling set by the bg-tl/br and mid-left/right modifiers below. */
+.bouquet {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  pointer-events: none;
+  z-index: 2;
+}
+.bouquet-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  animation: driftPetal 5.5s ease-in-out infinite;
+}
+.bouquet-inner .petal { position: absolute; border-radius: 50% 0 50% 50%; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); }
+.bouquet-inner .leaf { position: absolute; border-radius: 0 100% 0 100%; background: linear-gradient(135deg, #8fbf7a, #3f6b3a); }
+
+/* A fuller 5-rose + 2-leaf cluster (was 3 flat petals) — dense enough to read
+   as an actual corner bouquet rather than a few scattered dots. */
+.bouquet-inner .petal-1 { width: 46px; height: 34px; top: 24px; left: 8px; transform: rotate(-20deg); background: radial-gradient(circle at 30% 30%, #ffe6b0, var(--marigold) 74%); z-index: 3; }
+.bouquet-inner .petal-2 { width: 42px; height: 32px; top: 38px; left: 34px; transform: rotate(24deg); background: radial-gradient(circle at 30% 30%, #ffd0dc, var(--rose) 78%); z-index: 4; }
+.bouquet-inner .petal-3 { width: 32px; height: 24px; top: 10px; left: 46px; transform: rotate(-8deg); background: radial-gradient(circle at 30% 30%, #fffdf6, var(--jasmine) 85%); z-index: 5; }
+.bouquet-inner .petal-4 { width: 36px; height: 27px; top: 48px; left: 2px; transform: rotate(48deg); background: radial-gradient(circle at 30% 30%, #f6c9de, var(--lotus) 80%); z-index: 2; }
+.bouquet-inner .petal-5 { width: 27px; height: 20px; top: 4px; left: 16px; transform: rotate(-42deg); background: radial-gradient(circle at 30% 30%, #ffe6b0, #d68a1d 75%); z-index: 1; }
+.bouquet-inner .leaf-1 { width: 32px; height: 15px; top: 60px; left: 32px; transform: rotate(20deg); z-index: 0; }
+.bouquet-inner .leaf-2 { width: 26px; height: 13px; top: 6px; left: 52px; transform: rotate(-58deg); z-index: 0; }
+
+/* Anchored + scaled from the scene's own corner (not the element center) so
+   the enlarged bouquet grows into the visible area instead of being clipped
+   by the scene's overflow:hidden. */
+.bouquet.bg-tl { top: 0; left: 0; transform-origin: 0 0; transform: scale(3.2); opacity: 0.62; z-index: -1; }
+.bouquet.bg-br { bottom: 0; right: 0; transform-origin: 100% 100%; transform: scale(-3.2, -3.2); opacity: 0.56; z-index: -1; }
+
+/* Smaller pair anchored to the vertical mid-sides, so florals aren't only in
+   the corners — helps fill the tall empty flanks of a full-viewport scene. */
+.bouquet.mid-left { top: 40%; left: 0; transform-origin: 0 50%; transform: scale(1.7) rotate(-90deg); opacity: 0.4; z-index: -1; }
+.bouquet.mid-right { top: 60%; right: 0; transform-origin: 100% 50%; transform: scale(-1.7, 1.7) rotate(-90deg); opacity: 0.36; z-index: -1; }
+
+/* --- Temple frame (mandap pillars + garland + medallion) ---
+   Every ceremony photo now sits inside a small mandap: two carved wooden
+   pillars flank it, a marigold-and-jasmine garland is strung between their
+   tops, and a glowing medallion sits above that — the actual structure from
+   the "Temple Garland & Diyas" reference, rather than florals scattered on
+   a plain rectangle. All three are children of `.media-slot` itself (which
+   already isolates its own stacking context) so they position from its
+   real edges instead of guessing at scene-level coordinates. */
+.temple-pillar {
+  position: absolute;
+  top: -8px;
+  bottom: -16px;
+  width: 15px;
+  z-index: 2;
+  border-radius: 5px;
+  background: repeating-linear-gradient(180deg, #5c3a1e 0 9px, #7a5230 9px 13px, #5c3a1e 13px 22px);
+  box-shadow: inset -3px 0 4px rgba(0, 0, 0, 0.4), inset 2px 0 3px rgba(255, 220, 160, 0.15), 0 3px 5px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+.temple-pillar::before,
+.temple-pillar::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 25px;
+  height: 8px;
+  background: #4a2c16;
+  border-radius: 3px;
+}
+.temple-pillar::before { top: -6px; }
+.temple-pillar::after { bottom: -6px; }
+.temple-pillar-l { left: -11px; }
+.temple-pillar-r { right: -11px; }
+
+.temple-garland {
+  position: absolute;
+  left: -6px;
+  right: -6px;
+  top: -30px;
+  height: 36px;
+  z-index: 3;
+  pointer-events: none;
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.3));
+}
+.temple-garland::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 8 Q100 54 198 8' fill='none' stroke='%23fff8ec' stroke-width='11' stroke-linecap='round' stroke-dasharray='2 7'/%3E%3Cpath d='M2 15 Q100 62 198 15' fill='none' stroke='%23f6a623' stroke-width='13' stroke-linecap='round' stroke-dasharray='2 8'/%3E%3Cpolygon points='6,4 16,18 2,16' fill='%232e7d4f'/%3E%3Cpolygon points='194,4 198,16 184,18' fill='%232e7d4f'/%3E%3Ccircle cx='100' cy='58' r='5' fill='%23a51d3a'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.temple-medallion {
+  position: absolute;
+  left: 50%;
+  top: -58px;
+  transform: translateX(-50%);
+  width: 72px;
+  height: 72px;
+  z-index: 4;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 42%, #fff6d8 0%, var(--accent) 55%, #6e4f11 100%);
+  box-shadow: 0 0 22px 6px rgba(255, 205, 110, 0.7), inset 0 0 0 3px rgba(255, 255, 255, 0.55), 0 3px 6px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+.temple-medallion::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg, rgba(122, 31, 44, 0.55) 0deg 6deg, transparent 6deg 24deg);
+  -webkit-mask: radial-gradient(circle, transparent 58%, black 60%, black 84%, transparent 86%);
+  mask: radial-gradient(circle, transparent 58%, black 60%, black 84%, transparent 86%);
+  animation: slowRotate 60s linear infinite;
+}
+.temple-medallion::after {
+  content: '❀';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: #7a1f2c;
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.6);
+}
+
+/* Soft warm halo glowing at the center of every scene — ambient light only
+   (opacity-only animation), no rotating ring pattern; the mandala watermark
+   that used to sit here was removed as visual clutter once the photo frames
+   got their own medallion. */
+.mandala-glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 280px;
+  height: 280px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 196, 110, 0.55) 0%, transparent 70%);
+  filter: blur(20px);
+  pointer-events: none;
+  z-index: -3;
+  animation: haloPulse 5s ease-in-out infinite;
+}
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff3c4, transparent 70%);
+  animation: turmericDrift 5s ease-in-out infinite;
+}
+.mini-flame {
+  position: absolute;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: radial-gradient(circle at 50% 30%, #fff3c4, #ffdf6b 60%, #e2660f);
+  box-shadow: 0 0 10px rgba(255, 223, 107, 0.8);
+  animation: flicker 1.4s ease-in-out infinite;
+}
+.mini-sparkle {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  animation: sparkleTwinkle 2.2s ease-in-out infinite;
+}
+.gold-swirl {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 220px; height: 220px;
+  margin-left: -110px; margin-top: -110px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent, rgba(212, 175, 55, 0.25), transparent 40%);
+  animation: slowRotate 14s linear infinite;
+}
+.gold-ring {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: 70px; height: 70px;
+  border-radius: 50%;
+  border: 1px dashed rgba(212, 175, 55, 0.4);
+}
+.mini-bloom {
+  position: absolute;
+  border-radius: 50% 0 50% 50%;
+  background: radial-gradient(circle at 35% 30%, #fff, var(--accent) 75%);
+  animation: bloomPulse 3.4s ease-in-out infinite;
+}
+
+/* --- Venue + RSVP scene ---
+   The densest scene on the page (photo + button + accommodation note + full
+   RSVP form) — tall enough on short phone viewports to exceed a fixed 100vh
+   and get clipped by `.scene`'s overflow:hidden. `height:auto` (bounded by
+   `min-height:100vh`) lets it grow to fit its own content instead; scroll-
+   snap still aligns its top edge, guests just scroll a little further
+   through it before the next scene snaps. */
+.scene-venue {
+  height: auto;
+  min-height: 100vh;
+  background: #fdf8f0;
+  gap: 14px;
+  padding: 32px 30px 48px;
+  --glow-color: #7fbfae;
+}
+.scene-venue .scene-eyebrow { color: var(--accent); letter-spacing: 0.08em; }
+.scene-venue h2 { font: 600 24px 'Cormorant Garamond', serif; color: #3a2e10; text-align: center; }
+.scene-venue .venue-sub { font: 400 11.5px 'Jost', sans-serif; color: rgba(58, 46, 16, 0.6); }
+.pill-btn {
+  font: 600 12px 'Jost', sans-serif;
+  background: var(--accent);
+  color: #fff;
+  padding: 10px 22px;
+  border-radius: 20px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+.divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(139, 109, 31, 0.4), transparent);
+}
+.rsvp-heading { font: 600 13px 'Jost', sans-serif; color: #3a2e10; }
+.rsvp-form { width: 100%; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+.rsvp-input,
+.rsvp-select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgba(139, 109, 31, 0.3);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font: 400 12px 'Jost', sans-serif;
+  color: #3a2e10;
+  background: #fff;
+}
+.rsvp-radios {
+  display: flex;
+  gap: 18px;
+  font: 400 12px 'Jost', sans-serif;
+  color: #3a2e10;
+  width: 100%;
+}
+.rsvp-radios label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+
+/* Accommodation note — sits between the directions link and the RSVP form. */
+.accommodation {
+  width: 100%;
+  max-width: 340px;
+  text-align: center;
+  background: rgba(127, 191, 174, 0.1);
+  border: 1px solid rgba(58, 46, 16, 0.15);
+  border-radius: 12px;
+  padding: 12px 16px;
+}
+.accommodation-heading {
+  font: 600 12px 'Jost', sans-serif;
+  letter-spacing: 0.1em;
+  color: #3a2e10;
+  margin-bottom: 4px;
+}
+.accommodation-text {
+  font: 400 11.5px 'Jost', sans-serif;
+  color: rgba(58, 46, 16, 0.7);
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   Scene: Our Story
+   ========================================================================== */
+.scene-story { background: linear-gradient(160deg, #fdf3e4, #f0d9c0); --glow-color: var(--rose); }
+.scene-story .title-flourish .fl-line { background: linear-gradient(90deg, transparent, #8a6d1f, transparent); }
+.scene-story .scene-title { color: #4a2a1a; }
+.scene-story .scene-title-hindi { color: #8a6d1f; }
+
+.story-timeline {
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding-left: 22px;
+  border-left: 2px solid rgba(212, 175, 55, 0.4);
+}
+.story-item { position: relative; text-align: left; }
+.story-dot {
+  position: absolute;
+  left: -27px;
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+}
+.story-heading {
+  font: 600 16px 'Cormorant Garamond', serif;
+  color: #4a2a1a;
+  margin-bottom: 4px;
+}
+.story-text {
+  font: 400 12.5px 'Jost', sans-serif;
+  color: rgba(74, 42, 26, 0.72);
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   Scene: Schedule at a Glance (countdown + add-to-calendar)
+   ========================================================================== */
+.scene-schedule { background: linear-gradient(160deg, #1f2a44, #0d1420 75%); --glow-color: var(--accent); gap: 22px; }
+.scene-schedule .title-flourish .fl-line { background: var(--rose-gold); }
+.scene-schedule .scene-title { color: var(--cream); }
+.scene-schedule .scene-title-hindi { color: #cbb98a; }
+
+.countdown { width: 100%; max-width: 320px; text-align: center; }
+.countdown-label {
+  font: 500 11.5px 'Jost', sans-serif;
+  letter-spacing: 0.08em;
+  color: rgba(246, 234, 208, 0.7);
+  margin-bottom: 12px;
+}
+.countdown-grid { display: flex; justify-content: center; gap: 10px; }
+.countdown-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 10px;
+  padding: 10px 4px;
+  width: 62px;
+}
+.countdown-num {
+  font: 600 24px 'Cormorant Garamond', serif;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.countdown-unit-label {
+  font: 400 9.5px 'Jost', sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(246, 234, 208, 0.55);
+  margin-top: 2px;
+}
+
+.itinerary { width: 100%; max-width: 340px; display: flex; flex-direction: column; gap: 10px; }
+.itinerary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(212, 175, 55, 0.22);
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+.itinerary-name { font: 600 15px 'Cormorant Garamond', serif; color: var(--cream); }
+.itinerary-when { font: 400 11px 'Jost', sans-serif; color: rgba(246, 234, 208, 0.6); margin-top: 2px; }
+.itinerary-cal {
+  flex: none;
+  font: 500 10.5px 'Jost', sans-serif;
+  color: #0d1420;
+  background: var(--accent);
+  padding: 7px 11px;
+  border-radius: 14px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Scene: Thank You (closing)
+   ========================================================================== */
+.scene-thankyou { background: var(--envelope-bg); --glow-color: var(--accent); }
+.scene-thankyou .title-flourish .fl-line { background: var(--rose-gold); }
+.scene-thankyou .scene-title { color: var(--cream); text-align: center; }
+.scene-thankyou .scene-title-hindi { color: #e8d3a3; }
+.thankyou-text {
+  font: 400 13.5px 'Jost', sans-serif;
+  color: rgba(246, 234, 208, 0.78);
+  text-align: center;
+  line-height: 1.75;
+  max-width: 290px;
+}
+.thankyou-signoff {
+  font: 500 17px 'Cormorant Garamond', serif;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+
+/* ==========================================================================
+   Music toggle
+   ========================================================================== */
+
+.music-pill {
+  position: fixed;
+  bottom: 22px; right: 22px;
+  z-index: 200;
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 26%, #f6e3a3, var(--accent) 55%, #6e4f11 100%);
+  border: 2px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+}
+.music-pill:hover { transform: scale(1.1); }
+.music-pill.paused { opacity: 0.55; filter: grayscale(0.7); }
+
+/* ==========================================================================
+   Keyframes (from the original design)
+   ========================================================================== */
+
+@keyframes fadein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes burstPulse { 0% { opacity: 0.85; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(2.4); } }
+@keyframes sealGlow { 0% { opacity: 1; transform: scale(1); filter: brightness(1); } 40% { opacity: 1; transform: scale(1.2); filter: brightness(2.1); } 100% { opacity: 0; transform: scale(1.5); filter: brightness(2.2) blur(6px); } }
+@keyframes haloBreathe { 0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); } 50% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.12); } }
+@keyframes flapOpen { 0% { transform: rotateX(0deg); } 100% { transform: rotateX(180deg); } }
+@keyframes particleFloat { 0% { opacity: 0; transform: translate(0, 0) scale(0.6); } 18% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--dx, 8px), -170px) scale(1); } }
+@keyframes crackFade { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 1; } }
+@keyframes greetingIn { 0% { opacity: 0; transform: translateY(14px); } 100% { opacity: 1; transform: translateY(0); } }
+@keyframes petalFall { 0% { transform: translateY(-8vh) translateX(0) rotate(0deg); opacity: 0; } 8% { opacity: 1; } 88% { opacity: 1; } 100% { transform: translateY(112vh) translateX(var(--sway, 20px)) rotate(300deg); opacity: 0; } }
+@keyframes kenburns { 0% { transform: scale(1); } 100% { transform: scale(1.08); } }
+@keyframes flicker { 0%, 100% { transform: scaleY(1) scaleX(1); opacity: 1; } 50% { transform: scaleY(1.08) scaleX(0.94); opacity: 0.92; } }
+@keyframes driftPetal { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-6px) rotate(6deg); } }
+@keyframes ringPulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 0.9; } }
+@keyframes slowRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes bloomPulse { 0%, 100% { transform: scale(1); opacity: 0.85; } 50% { transform: scale(1.12); opacity: 1; } }
+@keyframes sparkleTwinkle { 0%, 100% { opacity: 0.2; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.15); } }
+@keyframes turmericDrift { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(4px, -6px) scale(1.06); } }
+@keyframes glowPulse { 0%, 100% { opacity: 0.4; transform: scale(1); } 50% { opacity: 0.65; transform: scale(1.08); } }
+@keyframes haloPulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 0.85; } }
+
+@media print {
+  .music-pill, .back-btn { display: none; }
+}
