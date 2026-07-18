@@ -13,7 +13,11 @@ file and refresh.
 | Sangeet           | `sangeet.mp4`, `sangeet.webm`, `sangeet.jpg`, `sangeet.png`     |
 | Shubh Vivah       | `vivah.mp4`, `vivah.webm`, `vivah.jpg`, `vivah.png`             |
 | Grand Reception   | `reception.mp4`, `reception.webm`, `reception.jpg`, `reception.png` |
-| Venue             | `venue.mp4`, `venue.webm`, `venue.jpg`, `venue.png` (already included) |
+
+The Venue scene doesn't show a photo or map — it's text-only (a short Bhimtal
+description, directions link, and travel tips), so a `venue.*` file in this
+folder isn't used by the page (safe to remove if it's just taking up space in
+the repo).
 
 Tips:
 - Videos are shown muted, looping, and autoplaying (`js/app.js`) so any short

@@ -18,8 +18,6 @@
   const sealHalo = document.getElementById('sealHalo');
   const sealBurst = document.getElementById('sealBurst');
   const sealParticles = document.getElementById('sealParticles');
-  const crack1 = document.getElementById('crack1');
-  const crack2 = document.getElementById('crack2');
   const page1Hint = document.getElementById('page1Hint');
   const page1 = document.getElementById('page1');
   const page2 = document.getElementById('page2');
@@ -37,8 +35,6 @@
     sealBtn.classList.add('cracking');
     sealHalo.classList.add('cracking');
     sealBurst.classList.add('cracking');
-    crack1.classList.add('show');
-    crack2.classList.add('show');
     spawnBurstParticles();
     page1Hint.classList.add('fade');
 
@@ -50,40 +46,63 @@
     setTimeout(() => {
       petalShower.classList.remove('hidden');
       spawnPetals();
-    }, 1550);
+    }, 1500);
 
     setTimeout(() => {
       greetingOverlay.classList.remove('hidden');
     }, 2500);
 
+    // Give the greeting a real, unhurried moment on screen, then let it
+    // dissolve at the same instant page 2 starts fading in behind it and
+    // the envelope (page1) starts fading out on top of it — a layered
+    // crossfade rather than an abrupt cut between scenes.
     setTimeout(() => {
       greetingOverlay.classList.add('fade-out');
-    }, 2500 + 900);
 
-    setTimeout(() => {
-      page1.classList.add('hidden');
       page2.classList.remove('hidden');
       page2.scrollTop = 0;
-      greetingOverlay.classList.add('hidden');
-      greetingOverlay.classList.remove('fade-out');
+      page1.classList.add('exiting');
       // #page2 was display:none until now, so the scratch canvases (sized
       // from their own bounding box) need to be (re)painted at their real size.
       requestAnimationFrame(refreshScratchCanvasSizes);
-    }, 3400);
+      // Start the music automatically now that the guest has "arrived" on
+      // page 2 — the seal tap that got them here counts as the user gesture
+      // browsers require before allowing audio with sound, so this isn't
+      // blocked the way a plain autoplay-on-load attempt would be. If a
+      // browser blocks it anyway, fail silently and leave the music button
+      // in its normal paused state for the guest to start manually.
+      if (bgAudio && bgAudio.paused) {
+        bgAudio.play().then(() => { if (musicBtn) musicBtn.classList.remove('paused'); }).catch(() => {});
+      }
+    }, 3650);
+
+    // Only fully detach each element (display:none / hidden) once its own
+    // fade transition has actually had time to finish — added as separate,
+    // later timeouts so the CSS transitions above get to render instead of
+    // being overwritten in the same tick.
+    setTimeout(() => {
+      greetingOverlay.classList.add('hidden');
+      greetingOverlay.classList.remove('fade-out');
+    }, 3650 + 700);
+
+    setTimeout(() => {
+      page1.classList.add('hidden');
+      page1.classList.remove('exiting');
+    }, 3650 + 850);
   }
 
   function handleBack() {
     opened = false;
     page2.classList.add('hidden');
     page1.classList.remove('hidden');
+    page1.classList.remove('exiting');
     petalShower.classList.add('hidden');
     petalShower.innerHTML = '';
     greetingOverlay.classList.add('hidden');
+    greetingOverlay.classList.remove('fade-out');
     sealBtn.classList.remove('cracking');
     sealHalo.classList.remove('cracking');
     sealBurst.classList.remove('cracking');
-    crack1.classList.remove('show');
-    crack2.classList.remove('show');
     page1Hint.classList.remove('fade');
     flap.classList.remove('opened');
     glow.classList.remove('opened');
@@ -195,18 +214,34 @@
 
   // ---- RSVP -> WHATSAPP ---------------------------------------------------
   const rsvpForm = document.getElementById('rsvpForm');
+  const rsvpGuestsSelect = document.getElementById('rsvpGuests');
+  const rsvpAttendingRadios = document.querySelectorAll('input[name="attending"]');
+
+  // Guest count only makes sense if they're actually coming — hide it the
+  // moment "Regrets" is picked instead of asking a question that no longer applies.
+  function updateRsvpGuestsVisibility() {
+    const checked = document.querySelector('input[name="attending"]:checked');
+    const declining = checked && checked.value === 'Regretfully Declining';
+    if (rsvpGuestsSelect) rsvpGuestsSelect.classList.toggle('hidden', declining);
+  }
+  rsvpAttendingRadios.forEach((radio) => radio.addEventListener('change', updateRsvpGuestsVisibility));
+  updateRsvpGuestsVisibility();
+
   if (rsvpForm) {
     rsvpForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const name = document.getElementById('rsvpName').value.trim();
-      const guests = document.getElementById('rsvpGuests').value;
+      const guests = rsvpGuestsSelect.value;
       const attending = document.querySelector('input[name="attending"]:checked');
       const status = attending ? attending.value : 'Joyfully Attending';
+      const isDeclining = status === 'Regretfully Declining';
 
       const text = `॥ RSVP • #UPWAN ॥\n\nNamaste! This is *${name}*.\n` +
-        `• Total Guests: ${guests || '1'}\n` +
+        (isDeclining ? '' : `• Total Guests: ${guests || '1'}\n`) +
         `• Status: ${status}\n\n` +
-        `We are looking forward to celebrating Pawan & Upasana's Shubh Vivah!`;
+        (isDeclining
+          ? `We'll miss celebrating with you, but thank you so much for letting us know!`
+          : `We are looking forward to celebrating Pawan & Upasana's Shubh Vivah!`);
 
       window.open(`https://api.whatsapp.com/send?phone=${RSVP_WHATSAPP_NUMBER}&text=${encodeURIComponent(text)}`, '_blank');
     });
@@ -229,7 +264,6 @@
   // ---- SAVE THE DATE: SCRATCH TILES + CONGRATULATIONS CELEBRATION ------------
   const congratsCelebration = document.getElementById('congratsCelebration');
   const congratsConfetti = document.getElementById('congratsConfetti');
-  const congratsText = document.getElementById('congratsText');
   const savedateScene = document.getElementById('savedateScene');
   const scratchTiles = document.querySelectorAll('.scratch-tile');
   let scratchedCount = 0;
@@ -250,7 +284,7 @@
 
   function spawnCongratsConfetti() {
     congratsConfetti.innerHTML = '';
-    const perOrigin = 18;
+    const perOrigin = 26; // no text alongside it anymore, so the burst itself carries the celebration
 
     POPPER_ORIGINS.forEach((origin) => {
       for (let i = 0; i < perOrigin; i++) {
@@ -292,13 +326,11 @@
     congratsShown = true;
     congratsCelebration.classList.remove('hidden');
     spawnCongratsConfetti();
-    congratsText.classList.add('show');
 
     setTimeout(() => {
       congratsCelebration.classList.add('hidden');
       congratsConfetti.innerHTML = '';
-      congratsText.classList.remove('show');
-    }, 4200);
+    }, 3200);
   }
 
   function revealTileInstantly(tile) {
@@ -307,7 +339,6 @@
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     canvas.classList.add('done');
-    canvas.style.opacity = '0';
     scratchedCount++;
   }
 
@@ -359,35 +390,87 @@
       return { x: clientX - r.left, y: clientY - r.top };
     }
 
+    // A soft, feathered brush (radial gradient alpha falloff) reads as real
+    // foil scratching instead of a hard-edged hole-punch circle.
+    const BRUSH_RADIUS = 20;
+    let wipeCount = 0;
+    let lastPos = null;
+
+    function eraseDisc(x, y) {
+      const brush = ctx.createRadialGradient(x, y, 0, x, y, BRUSH_RADIUS);
+      brush.addColorStop(0, 'rgba(0,0,0,1)');
+      brush.addColorStop(0.65, 'rgba(0,0,0,1)');
+      brush.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = brush;
+      ctx.beginPath();
+      ctx.arc(x, y, BRUSH_RADIUS, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
     function wipeAt(x, y) {
       if (canvas.classList.contains('done')) return;
       ctx.globalCompositeOperation = 'destination-out';
-      ctx.beginPath();
-      ctx.arc(x, y, 16, 0, Math.PI * 2);
-      ctx.fill();
-      checkScratchAmount();
+
+      // Stamping only at the pointer's exact position leaves gaps between
+      // fast-moving events — fill the segment from the last point too, so a
+      // quick swipe scratches a continuous line instead of dotted circles.
+      if (lastPos) {
+        const dist = Math.hypot(x - lastPos.x, y - lastPos.y);
+        const steps = Math.ceil(dist / (BRUSH_RADIUS * 0.5));
+        for (let s = 1; s <= steps; s++) {
+          eraseDisc(lastPos.x + ((x - lastPos.x) * s) / steps, lastPos.y + ((y - lastPos.y) * s) / steps);
+        }
+      } else {
+        eraseDisc(x, y);
+      }
+      lastPos = { x, y };
+
+      // Scanning every pixel of the canvas on every single pointer move was
+      // making the scratch feel laggy — sample a stride of pixels and only
+      // check progress every few strokes instead of on every event.
+      wipeCount++;
+      if (wipeCount % 3 === 0) checkScratchAmount();
     }
 
     function checkScratchAmount() {
       const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-      let transparent = 0;
-      for (let i = 3; i < pixels.length; i += 4) { if (pixels[i] === 0) transparent++; }
+      let sampled = 0;
+      let cleared = 0;
+      for (let i = 3; i < pixels.length; i += 4 * 4) {
+        sampled++;
+        if (pixels[i] < 40) cleared++;
+      }
 
-      if (transparent / (canvas.width * canvas.height) > 0.45) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (cleared / sampled > 0.4) {
         canvas.classList.add('done');
         scratchedCount++;
         if (scratchedCount === scratchTiles.length) celebrate();
       }
     }
 
-    canvas.addEventListener('mousedown', (e) => { scratching = true; const p = getPointerPos(e); wipeAt(p.x, p.y); });
-    canvas.addEventListener('mousemove', (e) => { if (scratching) { const p = getPointerPos(e); wipeAt(p.x, p.y); } });
-    window.addEventListener('mouseup', () => { scratching = false; });
+    function startScratch(e) {
+      scratching = true;
+      lastPos = null;
+      const p = getPointerPos(e);
+      wipeAt(p.x, p.y);
+    }
+    function moveScratch(e) {
+      if (!scratching) return;
+      const p = getPointerPos(e);
+      wipeAt(p.x, p.y);
+    }
+    function endScratch() {
+      scratching = false;
+      lastPos = null;
+    }
 
-    canvas.addEventListener('touchstart', (e) => { scratching = true; const p = getPointerPos(e); wipeAt(p.x, p.y); });
-    canvas.addEventListener('touchmove', (e) => { if (scratching) { const p = getPointerPos(e); wipeAt(p.x, p.y); } });
-    canvas.addEventListener('touchend', () => { scratching = false; });
+    canvas.addEventListener('mousedown', startScratch);
+    canvas.addEventListener('mousemove', moveScratch);
+    window.addEventListener('mouseup', endScratch);
+
+    canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startScratch(e); }, { passive: false });
+    canvas.addEventListener('touchmove', (e) => { e.preventDefault(); moveScratch(e); }, { passive: false });
+    canvas.addEventListener('touchend', endScratch);
   });
 
   // If the guest scrolls past the Save the Date scene without scratching every
@@ -417,32 +500,7 @@
     savedateObserver.observe(savedateScene);
   }
 
-  // ---- COUNTDOWN TIMER (to the Shubh Vivah) ----------------------------------
-  const countdownEl = document.getElementById('countdown');
-  if (countdownEl) {
-    const VIVAH_DATE = new Date('2026-11-21T11:00:00+05:30').getTime();
-    const cdDays = document.getElementById('cdDays');
-    const cdHours = document.getElementById('cdHours');
-    const cdMins = document.getElementById('cdMins');
-    const cdSecs = document.getElementById('cdSecs');
-    const pad = (n) => String(n).padStart(2, '0');
-
-    function tickCountdown() {
-      const diff = VIVAH_DATE - Date.now();
-      if (diff <= 0) {
-        [cdDays, cdHours, cdMins, cdSecs].forEach((el) => { el.textContent = '00'; });
-        return;
-      }
-      cdDays.textContent = pad(Math.floor(diff / 86400000));
-      cdHours.textContent = pad(Math.floor((diff % 86400000) / 3600000));
-      cdMins.textContent = pad(Math.floor((diff % 3600000) / 60000));
-      cdSecs.textContent = pad(Math.floor((diff % 60000) / 1000));
-    }
-    tickCountdown();
-    setInterval(tickCountdown, 1000);
-  }
-
-  // ---- ADD TO CALENDAR (Google Calendar links, generated per ceremony) ------
+  // ---- ADD TO CALENDAR (Google Calendar links, one per ceremony scene) ------
   const CEREMONY_EVENTS = {
     haldi: { title: 'Haldi Ceremony — Pawan & Upasana', start: '2026-11-20T10:00:00+05:30', end: '2026-11-20T12:00:00+05:30' },
     sangeet: { title: 'Sangeet — Pawan & Upasana', start: '2026-11-20T17:00:00+05:30', end: '2026-11-20T20:00:00+05:30' },
@@ -456,7 +514,7 @@
     return new Date(iso).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
   }
 
-  document.querySelectorAll('.itinerary-cal').forEach((link) => {
+  document.querySelectorAll('.calendar-link').forEach((link) => {
     const event = CEREMONY_EVENTS[link.getAttribute('data-cal')];
     if (!event) return;
     const params = new URLSearchParams({
@@ -468,6 +526,36 @@
     });
     link.href = `https://calendar.google.com/calendar/render?${params.toString()}`;
   });
+
+  // ---- PER-CEREMONY COUNTDOWNS (one on each scene, own target time) ---------
+  const pad2 = (n) => String(n).padStart(2, '0');
+  const countdowns = Array.from(document.querySelectorAll('[data-countdown]')).map((el) => ({
+    el,
+    target: new Date(CEREMONY_EVENTS[el.getAttribute('data-countdown')]?.start).getTime(),
+    dEl: el.querySelector('[data-cd="d"]'),
+    hEl: el.querySelector('[data-cd="h"]'),
+    mEl: el.querySelector('[data-cd="m"]'),
+    sEl: el.querySelector('[data-cd="s"]'),
+  })).filter((cd) => !Number.isNaN(cd.target));
+
+  function tickCountdowns() {
+    const now = Date.now();
+    countdowns.forEach(({ target, dEl, hEl, mEl, sEl }) => {
+      const diff = target - now;
+      if (diff <= 0) {
+        dEl.textContent = hEl.textContent = mEl.textContent = sEl.textContent = '00';
+        return;
+      }
+      dEl.textContent = pad2(Math.floor(diff / 86400000));
+      hEl.textContent = pad2(Math.floor((diff % 86400000) / 3600000));
+      mEl.textContent = pad2(Math.floor((diff % 3600000) / 60000));
+      sEl.textContent = pad2(Math.floor((diff % 60000) / 1000));
+    });
+  }
+  if (countdowns.length) {
+    tickCountdowns();
+    setInterval(tickCountdowns, 1000);
+  }
 
   // ---- SCENE ENTRANCE ANIMATION + SIDE DOT-NAV -------------------------------
   const allScenes = document.querySelectorAll('.scene');

@@ -13,7 +13,7 @@ or deploy it as-is to GitHub Pages.
 index.html            Markup for both pages (envelope + ceremony scenes)
 css/style.css          All styling, animations, and color variables
 js/app.js               Envelope open sequence, media loader, RSVP, music toggle
-assets/audio/           Background music (wedding-music.mp3)
+assets/audio/           Background music (aaj-se-teri.mp4)
 assets/media/           Ceremony photos/videos (see assets/media/README.md)
 ```
 
@@ -46,21 +46,15 @@ each scene shows an elegant animated placeholder.
 `RSVP_WHATSAPP_NUMBER` constant near the top with the family's WhatsApp number
 (country code + number, digits only).
 
-**Music** — replace `assets/audio/wedding-music.mp3` with your own track (keep
-the same filename, or update the `<source>` path in `index.html`).
+**Music** — currently `assets/audio/aaj-se-teri.mp4`. Replace it with a
+different track any time (keep the same filename, or update the `<source>`
+path/type in `index.html`).
 
-**Our Story** — the "Our Story" scene in `index.html` ships with placeholder
-copy (search for `add_placeholder`) for the "How We Met" and "The Proposal"
-timeline entries — replace with your real story.
-
-**Accommodation** — the note in the Venue scene (search for `add_placeholder`)
-ships with generic copy; replace it with real nearby-hotel options, a
-room-block code, or a contact number.
-
-**Countdown + Add to Calendar** — the "Schedule at a Glance" scene counts down
-to the `VIVAH_DATE` constant in `js/app.js`, and its "+ Calendar" buttons are
-generated from the `CEREMONY_EVENTS` object right below it — update both if any
-ceremony's date/time changes, and update `VENUE_LOCATION` if the venue does.
+**Countdown + Add to Calendar** — each ceremony scene has its own live
+countdown and a "+ Add to Calendar" link right under its date, both driven by
+the `CEREMONY_EVENTS` object in `js/app.js` — update it if any ceremony's
+date/time changes, and update `VENUE_LOCATION` if
+the venue does.
 
 ## Run locally
 

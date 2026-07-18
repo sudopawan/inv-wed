@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Pawan &amp; Upasana • #UPWAN MMXXVI</title>
+<meta name="description" content="You're invited! Join Pawan &amp; Upasana's wedding celebrations — Haldi, Sangeet, Shubh Vivah &amp; Reception — 20&ndash;22 November 2026 in Bhimtal, Uttarakhand.">
+<meta name="theme-color" content="#3a0d13">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%233a0d13'/%3E%3Cellipse cx='32' cy='44' rx='14' ry='5' fill='%237a4d10'/%3E%3Cpath d='M32 16 C24 28 24 38 32 42 C40 38 40 28 32 16 Z' fill='%23D4AF37'/%3E%3C/svg%3E">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,15 +28,12 @@
 
   <!-- Congratulations celebration: shown once the Save the Date tiles are all
        scratched, or automatically if the guest scrolls past without scratching.
-       A burst of flowers/confetti fills the screen with a floating message —
-       no modal card. -->
+       Confetti only, no overlaid text — the tiles right underneath already
+       spell out the dates, so a floating "Join us 20-22 November..." line
+       was just duplicating them in an ugly overlap. The burst itself is the
+       celebration. -->
   <div id="congratsCelebration" class="congrats-celebration hidden">
     <div id="congratsConfetti" class="congrats-confetti-layer"></div>
-    <div id="congratsText" class="congrats-text">
-      <p class="congrats-flowers">🌸 🌼 🌺 🌼 🌸</p>
-      <h2>The Date is Set!</h2>
-      <p>Join us 20&ndash;22 November 2026 for Pawan &amp; Upasana's Shubh Vivah</p>
-    </div>
   </div>
 
   <div class="card">
@@ -57,11 +57,26 @@
 
           <button id="sealBtn" class="seal-btn" type="button" aria-label="Open the invitation">
             <div class="seal-face">
-              <div class="seal-ring">
-                <span class="seal-label">UPWAN</span>
-              </div>
-              <div id="crack1" class="seal-crack crack-1"></div>
-              <div id="crack2" class="seal-crack crack-2"></div>
+              <div class="seal-specular"></div>
+              <svg class="seal-branch" viewBox="0 0 200 200">
+                <defs>
+                  <path id="sealLeaf" d="M0,0 C2,-5 9,-5 13,0 C9,5 2,5 0,0 Z" />
+                  <g id="sealBranchShape">
+                    <path class="seal-stem" d="M100,160 C97,132 103,112 99,92 C96,74 102,56 100,42" />
+                    <use href="#sealLeaf" transform="translate(84,150) rotate(-42)" />
+                    <use href="#sealLeaf" transform="translate(117,140) rotate(42)" />
+                    <use href="#sealLeaf" transform="translate(81,120) rotate(-36) scale(0.94)" />
+                    <use href="#sealLeaf" transform="translate(120,111) rotate(36) scale(0.94)" />
+                    <use href="#sealLeaf" transform="translate(85,92) rotate(-30) scale(0.84)" />
+                    <use href="#sealLeaf" transform="translate(116,85) rotate(30) scale(0.84)" />
+                    <use href="#sealLeaf" transform="translate(90,68) rotate(-22) scale(0.68)" />
+                    <use href="#sealLeaf" transform="translate(111,61) rotate(22) scale(0.68)" />
+                    <use href="#sealLeaf" transform="translate(100,40) rotate(0) scale(0.5)" />
+                  </g>
+                </defs>
+                <use href="#sealBranchShape" class="seal-emboss-dark" x="1.3" y="1.6" />
+                <use href="#sealBranchShape" class="seal-emboss-light" x="-1.1" y="-1.1" />
+              </svg>
             </div>
           </button>
         </div>
@@ -69,6 +84,7 @@
         <div class="page1-title">
           <p class="eyebrow">You Are Invited</p>
           <h1>#UPWAN</h1>
+          <p class="page1-names">Pawan &amp; Upasana</p>
         </div>
 
         <div class="page1-spacer"></div>
@@ -152,91 +168,6 @@
         </div>
       </section>
 
-      <!-- Scene: Our Story -->
-      <section class="scene scene-story">
-        <div class="bouquet bg-tl"><div class="bouquet-inner"><span class="petal petal-1"></span><span class="petal petal-2"></span><span class="petal petal-3"></span><span class="petal petal-4"></span><span class="petal petal-5"></span><span class="leaf leaf-1"></span><span class="leaf leaf-2"></span></div></div>
-        <div class="bouquet bg-br"><div class="bouquet-inner"><span class="petal petal-1"></span><span class="petal petal-2"></span><span class="petal petal-3"></span><span class="petal petal-4"></span><span class="petal petal-5"></span><span class="leaf leaf-1"></span><span class="leaf leaf-2"></span></div></div>
-        <div class="mandala-glow"></div>
-        <div class="bouquet mid-left"><div class="bouquet-inner"><span class="petal petal-1"></span><span class="petal petal-2"></span><span class="petal petal-3"></span><span class="petal petal-4"></span><span class="petal petal-5"></span><span class="leaf leaf-1"></span><span class="leaf leaf-2"></span></div></div>
-        <div class="bouquet mid-right"><div class="bouquet-inner"><span class="petal petal-1"></span><span class="petal petal-2"></span><span class="petal petal-3"></span><span class="petal petal-4"></span><span class="petal petal-5"></span><span class="leaf leaf-1"></span><span class="leaf leaf-2"></span></div></div>
-
-        <div class="title-flourish"><span class="fl-dot"></span><span class="fl-line"></span><span class="fl-mark">❀</span><span class="fl-line"></span><span class="fl-dot"></span></div>
-        <h2 class="scene-title">Our Story</h2>
-        <p class="scene-title-hindi">हमारी कहानी</p>
-
-        <div class="story-timeline">
-          <div class="story-item">
-            <span class="story-dot"></span>
-            <p class="story-heading">How We Met</p>
-            <!-- add_placeholder: replace with your real "how we met" story -->
-            <p class="story-text">Add your story here — where and when your paths first crossed.</p>
-          </div>
-          <div class="story-item">
-            <span class="story-dot"></span>
-            <p class="story-heading">The Proposal</p>
-            <!-- add_placeholder: replace with your real proposal story -->
-            <p class="story-text">Add your story here — the moment it became forever.</p>
-          </div>
-          <div class="story-item">
-            <span class="story-dot"></span>
-            <p class="story-heading">Forever Begins</p>
-            <p class="story-text">20&ndash;22 November 2026, Bhimtal</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Scene: Schedule at a Glance -->
-      <section class="scene scene-schedule">
-        <div class="bouquet bg-tl"><div class="bouquet-inner"><span class="petal petal-1"></span><span class="petal petal-2"></span><span class="petal petal-3"></span><span class="petal petal-4"></span><span class="petal petal-5"></span><span class="leaf leaf-1"></span><span class="leaf leaf-2"></span></div></div>
-        <div class="bouquet bg-br"><div class="bouquet-inner"><span class="petal petal-1"></span><span class="petal petal-2"></span><span class="petal petal-3"></span><span class="petal petal-4"></span><span class="petal petal-5"></span><span class="leaf leaf-1"></span><span class="leaf leaf-2"></span></div></div>
-        <div class="mandala-glow"></div>
-
-        <div class="title-flourish"><span class="fl-dot"></span><span class="fl-line"></span><span class="fl-mark">❀</span><span class="fl-line"></span><span class="fl-dot"></span></div>
-        <h2 class="scene-title">Schedule at a Glance</h2>
-        <p class="scene-title-hindi">समारोह अनुसूची</p>
-
-        <div class="countdown" id="countdown">
-          <p class="countdown-label">Counting down to the Shubh Vivah</p>
-          <div class="countdown-grid">
-            <div class="countdown-unit"><span class="countdown-num" id="cdDays">00</span><span class="countdown-unit-label">Days</span></div>
-            <div class="countdown-unit"><span class="countdown-num" id="cdHours">00</span><span class="countdown-unit-label">Hours</span></div>
-            <div class="countdown-unit"><span class="countdown-num" id="cdMins">00</span><span class="countdown-unit-label">Mins</span></div>
-            <div class="countdown-unit"><span class="countdown-num" id="cdSecs">00</span><span class="countdown-unit-label">Secs</span></div>
-          </div>
-        </div>
-
-        <div class="itinerary">
-          <div class="itinerary-row">
-            <div class="itinerary-info">
-              <p class="itinerary-name">Haldi</p>
-              <p class="itinerary-when">20 Nov · 10:00 AM</p>
-            </div>
-            <a class="itinerary-cal" data-cal="haldi" href="#" target="_blank" rel="noopener">+ Calendar</a>
-          </div>
-          <div class="itinerary-row">
-            <div class="itinerary-info">
-              <p class="itinerary-name">Sangeet</p>
-              <p class="itinerary-when">20 Nov · 5:00 PM</p>
-            </div>
-            <a class="itinerary-cal" data-cal="sangeet" href="#" target="_blank" rel="noopener">+ Calendar</a>
-          </div>
-          <div class="itinerary-row">
-            <div class="itinerary-info">
-              <p class="itinerary-name">Shubh Vivah</p>
-              <p class="itinerary-when">21 Nov · 11:00 AM</p>
-            </div>
-            <a class="itinerary-cal" data-cal="vivah" href="#" target="_blank" rel="noopener">+ Calendar</a>
-          </div>
-          <div class="itinerary-row">
-            <div class="itinerary-info">
-              <p class="itinerary-name">Reception</p>
-              <p class="itinerary-when">22 Nov · 12:00 PM</p>
-            </div>
-            <a class="itinerary-cal" data-cal="reception" href="#" target="_blank" rel="noopener">+ Calendar</a>
-          </div>
-        </div>
-      </section>
-
       <!-- Scene: Haldi -->
       <section class="scene scene-haldi">
         <div class="bouquet bg-tl"><div class="bouquet-inner"><span class="petal petal-1"></span><span class="petal petal-2"></span><span class="petal petal-3"></span><span class="petal petal-4"></span><span class="petal petal-5"></span><span class="leaf leaf-1"></span><span class="leaf leaf-2"></span></div></div>
@@ -274,6 +205,13 @@
         </div>
 
         <p class="scene-date">20 November 2026 · 10:00 AM onwards</p>
+        <a class="calendar-link" data-cal="haldi" href="#" target="_blank" rel="noopener">+ Add to Calendar</a>
+        <div class="ceremony-countdown" data-countdown="haldi">
+          <div class="cd-unit"><span class="cd-num" data-cd="d">00</span><span class="cd-unit-label">Days</span></div>
+          <div class="cd-unit"><span class="cd-num" data-cd="h">00</span><span class="cd-unit-label">Hrs</span></div>
+          <div class="cd-unit"><span class="cd-num" data-cd="m">00</span><span class="cd-unit-label">Min</span></div>
+          <div class="cd-unit"><span class="cd-num" data-cd="s">00</span><span class="cd-unit-label">Sec</span></div>
+        </div>
 
         <div class="diya-row">
           <div class="diya-mini"><div class="diya-base"></div><div class="diya-flame" style="animation-delay:0s"></div></div>
@@ -306,7 +244,7 @@
         <p class="scene-title-hindi">संगीत संध्या</p>
 
         <!-- add_placeholder: assets/media/sangeet.mp4 (or .webm/.jpg/.png) -->
-        <div class="media-slot round" data-slot="sangeet" data-alt="Sangeet celebration">
+        <div class="media-slot rect" data-slot="sangeet" data-alt="Sangeet celebration">
           <div class="temple-pillar temple-pillar-l"></div>
           <div class="temple-pillar temple-pillar-r"></div>
           <div class="temple-garland"></div>
@@ -320,6 +258,13 @@
         </div>
 
         <p class="scene-date">20 November 2026 · 5:00 PM onwards</p>
+        <a class="calendar-link" data-cal="sangeet" href="#" target="_blank" rel="noopener">+ Add to Calendar</a>
+        <div class="ceremony-countdown" data-countdown="sangeet">
+          <div class="cd-unit"><span class="cd-num" data-cd="d">00</span><span class="cd-unit-label">Days</span></div>
+          <div class="cd-unit"><span class="cd-num" data-cd="h">00</span><span class="cd-unit-label">Hrs</span></div>
+          <div class="cd-unit"><span class="cd-num" data-cd="m">00</span><span class="cd-unit-label">Min</span></div>
+          <div class="cd-unit"><span class="cd-num" data-cd="s">00</span><span class="cd-unit-label">Sec</span></div>
+        </div>
 
         <div class="diya-row">
           <div class="diya-mini"><div class="diya-base"></div><div class="diya-flame" style="animation-delay:0s"></div></div>
@@ -351,7 +296,7 @@
         <p class="scene-title-hindi">पावन शुभ विवाह</p>
 
         <!-- add_placeholder: assets/media/vivah.mp4 (or .webm/.jpg/.png) -->
-        <div class="media-slot tall" data-slot="vivah" data-alt="Shubh Vivah ceremony">
+        <div class="media-slot rect" data-slot="vivah" data-alt="Shubh Vivah ceremony">
           <div class="temple-pillar temple-pillar-l"></div>
           <div class="temple-pillar temple-pillar-r"></div>
           <div class="temple-garland"></div>
@@ -363,6 +308,13 @@
         </div>
 
         <p class="scene-date">21 November 2026 · 11:00 AM onwards</p>
+        <a class="calendar-link" data-cal="vivah" href="#" target="_blank" rel="noopener">+ Add to Calendar</a>
+        <div class="ceremony-countdown" data-countdown="vivah">
+          <div class="cd-unit"><span class="cd-num" data-cd="d">00</span><span class="cd-unit-label">Days</span></div>
+          <div class="cd-unit"><span class="cd-num" data-cd="h">00</span><span class="cd-unit-label">Hrs</span></div>
+          <div class="cd-unit"><span class="cd-num" data-cd="m">00</span><span class="cd-unit-label">Min</span></div>
+          <div class="cd-unit"><span class="cd-num" data-cd="s">00</span><span class="cd-unit-label">Sec</span></div>
+        </div>
 
         <div class="diya-row">
           <div class="diya-mini"><div class="diya-base"></div><div class="diya-flame" style="animation-delay:0s"></div></div>
@@ -390,7 +342,7 @@
         <p class="scene-title-hindi">आशीर्वाद समारोह</p>
 
         <!-- add_placeholder: assets/media/reception.mp4 (or .webm/.jpg/.png) -->
-        <div class="media-slot arch" data-slot="reception" data-alt="Grand Reception">
+        <div class="media-slot rect" data-slot="reception" data-alt="Grand Reception">
           <div class="temple-pillar temple-pillar-l"></div>
           <div class="temple-pillar temple-pillar-r"></div>
           <div class="temple-garland"></div>
@@ -403,6 +355,13 @@
         </div>
 
         <p class="scene-date">22 November 2026 · 12:00 PM onwards</p>
+        <a class="calendar-link" data-cal="reception" href="#" target="_blank" rel="noopener">+ Add to Calendar</a>
+        <div class="ceremony-countdown" data-countdown="reception">
+          <div class="cd-unit"><span class="cd-num" data-cd="d">00</span><span class="cd-unit-label">Days</span></div>
+          <div class="cd-unit"><span class="cd-num" data-cd="h">00</span><span class="cd-unit-label">Hrs</span></div>
+          <div class="cd-unit"><span class="cd-num" data-cd="m">00</span><span class="cd-unit-label">Min</span></div>
+          <div class="cd-unit"><span class="cd-num" data-cd="s">00</span><span class="cd-unit-label">Sec</span></div>
+        </div>
 
         <div class="diya-row">
           <div class="diya-mini"><div class="diya-base"></div><div class="diya-flame" style="animation-delay:0s"></div></div>
@@ -426,24 +385,13 @@
         <p class="scene-eyebrow">Venue</p>
         <h2>Hotel Neelesh Inn</h2>
         <p class="venue-sub">Bhimtal Lake, Nainital District, Uttarakhand</p>
+        <div class="title-flourish"><span class="fl-dot"></span><span class="fl-line"></span><span class="fl-mark">❀</span><span class="fl-line"></span><span class="fl-dot"></span></div>
 
-        <div class="media-slot rect" data-slot="venue" data-alt="Hotel Neelesh Inn, Bhimtal">
-          <div class="temple-pillar temple-pillar-l"></div>
-          <div class="temple-pillar temple-pillar-r"></div>
-          <div class="temple-garland"></div>
-          <div class="temple-medallion"></div>
-          <div class="media-slot-placeholder" style="background:linear-gradient(160deg,#cdebe4,#8fb9ad)"></div>
-          <div class="lotus frame-lotus-l"><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span></div>
-          <div class="lotus frame-lotus-r"><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span></div>
-        </div>
+        <div class="lotus standalone"><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span></div>
+
+        <p class="venue-blurb">A quiet Himalayan lake town in the Kumaon foothills — calmer, greener, and less crowded than nearby Nainital.</p>
 
         <a href="https://www.google.com/maps?um=1&ie=UTF-8&fb=1&gl=in&sa=X&geocode=KQ37fEqGl6A5MdCy8UoZFBso&daddr=Nainital+near+bhimtal+lake,+Uttarakhand+263136" target="_blank" rel="noopener" class="pill-btn">Get Directions →</a>
-
-        <!-- add_placeholder: real accommodation details — nearby hotel options, a room-block code, or a contact number for booking help -->
-        <div class="accommodation">
-          <p class="accommodation-heading">✦ Where to Stay ✦</p>
-          <p class="accommodation-text">Guest rooms are available at the venue. For nearby stays or booking assistance, please reach out to the family.</p>
-        </div>
 
         <div class="divider"></div>
 
@@ -493,9 +441,9 @@
 </div>
 
 <button id="musicBtn" class="music-pill paused" type="button" title="Toggle music" aria-label="Toggle background music">🎵</button>
-<!-- add_placeholder: assets/audio/wedding-music.mp3 currently reuses the old track, swap in your own if you want a different one -->
+<!-- Auto-starts as soon as the envelope opens onto page 2 (see js/app.js) — the music toggle button still lets guests pause/resume it. -->
 <audio id="bgAudio" loop preload="auto">
-  <source src="assets/audio/wedding-music.mp3" type="audio/mpeg">
+  <source src="assets/audio/aaj-se-teri.mp4" type="audio/mp4">
 </audio>
 
 <script src="js/app.js"></script>
