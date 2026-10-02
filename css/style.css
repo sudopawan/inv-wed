@@ -570,6 +570,11 @@ h1, h2, h3, p {
 .scene-date {
   font: 500 15px 'Cormorant Garamond', serif;
 }
+.scene-address {
+  font: 400 12.5px 'Jost', sans-serif;
+  letter-spacing: 0.01em;
+  margin-top: -2px;
+}
 .scene-title-hindi {
   font-size: 17px;
   opacity: 0.85;
@@ -608,8 +613,8 @@ h1, h2, h3, p {
 .scene .title-flourish,
 .scene .scene-title,
 .scene .scene-date,
-.scene .calendar-link,
-.scene .venue-blurb,
+.scene .scene-address,
+.scene .scene-links,
 .scene .ceremony-countdown,
 .scene .media-slot,
 .scene .savedate,
@@ -626,8 +631,8 @@ h1, h2, h3, p {
 .scene.in-view .media-slot { opacity: 1; transform: translateY(0); transition-delay: 0.16s; }
 .scene.in-view .savedate { opacity: 1; transform: translateY(0); transition-delay: 0.18s; }
 .scene.in-view .scene-date { opacity: 1; transform: translateY(0); transition-delay: 0.32s; }
-.scene.in-view .calendar-link { opacity: 1; transform: translateY(0); transition-delay: 0.4s; }
-.scene.in-view .venue-blurb { opacity: 1; transform: translateY(0); transition-delay: 0.16s; }
+.scene.in-view .scene-address { opacity: 1; transform: translateY(0); transition-delay: 0.36s; }
+.scene.in-view .scene-links { opacity: 1; transform: translateY(0); transition-delay: 0.4s; }
 .scene.in-view .ceremony-countdown { opacity: 1; transform: translateY(0); transition-delay: 0.48s; }
 .scene.in-view .thankyou-text { opacity: 1; transform: translateY(0); transition-delay: 0.14s; }
 .scene.in-view .thankyou-signoff { opacity: 1; transform: translateY(0); transition-delay: 0.26s; }
@@ -761,7 +766,9 @@ h1, h2, h3, p {
 .scene-haldi .scene-title { color: #4a2a00; }
 .scene-haldi .scene-title-hindi { color: #5c3300; }
 .scene-haldi .scene-date { color: #4a2a00; }
-.scene-haldi .calendar-link { color: #4a2a00; border-color: rgba(74, 42, 0, 0.35); }
+.scene-haldi .scene-address { color: rgba(74, 42, 0, 0.72); }
+.scene-haldi .calendar-link,
+.scene-haldi .direction-link { color: #4a2a00; border-color: rgba(74, 42, 0, 0.35); }
 .scene-haldi .ceremony-countdown .cd-num { color: #4a2a00; }
 .scene-haldi .ceremony-countdown .cd-unit-label { color: rgba(74, 42, 0, 0.55); }
 .diya {
@@ -840,6 +847,7 @@ h1, h2, h3, p {
 .scene-sangeet .scene-title { color: #fbeaf3; }
 .scene-sangeet .scene-title-hindi { color: #f0c8dc; }
 .scene-sangeet .scene-date { color: #fbeaf3; }
+.scene-sangeet .scene-address { color: rgba(251, 234, 243, 0.75); }
 .drift-petal {
   position: absolute;
   border-radius: 50% 0 50% 50%;
@@ -878,6 +886,7 @@ h1, h2, h3, p {
 .scene-vivah .scene-title { color: var(--cream); }
 .scene-vivah .scene-title-hindi { color: #e8d3a3; }
 .scene-vivah .scene-date { color: var(--cream); }
+.scene-vivah .scene-address { color: rgba(246, 234, 208, 0.75); }
 .ring-orbit.vivah-outer { top: 50%; width: 260px; height: 260px; border: 1px dashed rgba(212, 175, 55, 0.28); animation: ringPulse 3s ease-in-out infinite; }
 .ring-orbit.vivah-inner { top: 50%; width: 200px; height: 200px; border: 1px dotted rgba(212, 175, 55, 0.3); }
 
@@ -900,7 +909,9 @@ h1, h2, h3, p {
 .scene-reception .scene-title { color: #3a2e10; }
 .scene-reception .scene-title-hindi { color: #8a6d1f; }
 .scene-reception .scene-date { color: #3a2e10; }
-.scene-reception .calendar-link { color: #3a2e10; border-color: rgba(58, 46, 16, 0.3); }
+.scene-reception .scene-address { color: rgba(58, 46, 16, 0.72); }
+.scene-reception .calendar-link,
+.scene-reception .direction-link { color: #3a2e10; border-color: rgba(58, 46, 16, 0.3); }
 .scene-reception .ceremony-countdown .cd-num { color: #3a2e10; }
 .scene-reception .ceremony-countdown .cd-unit-label { color: rgba(58, 46, 16, 0.55); }
 .bloom {
@@ -1159,75 +1170,18 @@ h1, h2, h3, p {
   animation: bloomPulse 3.4s ease-in-out infinite;
 }
 
-/* --- Venue + RSVP scene ---
-   The densest scene on the page (blurb + directions button + full RSVP form)
-   — tall enough on short phone viewports to exceed a fixed 100vh and get
-   clipped by `.scene`'s overflow:hidden. `height:auto` (bounded by
-   `min-height:100vh`) lets it grow to fit its own content instead; scroll-
-   snap still aligns its top edge, guests just scroll a little further
-   through it before the next scene snaps. */
-.scene-venue {
-  height: auto;
-  min-height: 100vh;
-  background: #fdf8f0;
-  gap: 14px;
-  padding: 32px 30px 48px;
-  --glow-color: #7fbfae;
-}
-.scene-venue .scene-eyebrow { color: var(--accent); letter-spacing: 0.08em; }
-.scene-venue h2 { font: 600 24px 'Cormorant Garamond', serif; color: #3a2e10; text-align: center; }
-.scene-venue .venue-sub { font: 400 11.5px 'Jost', sans-serif; color: rgba(58, 46, 16, 0.6); }
-.scene-venue .title-flourish .fl-line { background: linear-gradient(90deg, transparent, #8a6d1f, transparent); }
-
-.venue-blurb {
-  font: 400 12.5px 'Jost', sans-serif;
-  font-style: italic;
-  color: rgba(58, 46, 16, 0.75);
-  text-align: center;
-  line-height: 1.6;
-  max-width: 280px;
-}
-.pill-btn {
-  font: 600 12px 'Jost', sans-serif;
-  background: var(--accent);
-  color: #fff;
-  padding: 10px 22px;
-  border-radius: 20px;
-  text-decoration: none;
-  border: none;
-  cursor: pointer;
-  margin-bottom: 10px;
-}
-.divider {
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(139, 109, 31, 0.4), transparent);
-}
-.rsvp-heading { font: 600 13px 'Jost', sans-serif; color: #3a2e10; }
-.rsvp-form { width: 100%; display: flex; flex-direction: column; gap: 10px; align-items: center; }
-.rsvp-input,
-.rsvp-select {
-  width: 100%;
-  box-sizing: border-box;
-  border: 1px solid rgba(139, 109, 31, 0.3);
-  border-radius: 8px;
-  padding: 10px 12px;
-  font: 400 12px 'Jost', sans-serif;
-  color: #3a2e10;
-  background: #fff;
-}
-.rsvp-radios {
+/* Add-to-Calendar + Get Directions — sit together right under each ceremony's
+   date/address. Calendar href is generated by JS (CEREMONY_EVENTS in app.js,
+   keyed by data-cal); directions hrefs are static per-venue links in the HTML. */
+.scene-links {
   display: flex;
-  gap: 18px;
-  font: 400 12px 'Jost', sans-serif;
-  color: #3a2e10;
-  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: -6px;
 }
-.rsvp-radios label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
-
-/* Add-to-Calendar link — sits right under each ceremony's date. href is
-   generated by JS (see CEREMONY_EVENTS in app.js) from the data-cal value. */
-.calendar-link {
+.calendar-link,
+.direction-link {
   display: inline-block;
   font: 500 11px 'Jost', sans-serif;
   letter-spacing: 0.03em;
@@ -1236,7 +1190,6 @@ h1, h2, h3, p {
   border: 1px solid var(--accent-soft);
   border-radius: 14px;
   padding: 5px 14px;
-  margin-top: -6px;
 }
 
 /* Small per-ceremony countdown — one on each ceremony scene, each ticking

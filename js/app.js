@@ -1,12 +1,8 @@
 // #UPWAN — Pawan & Upasana wedding invitation
-// Envelope open animation, ceremony media loader, WhatsApp RSVP, music toggle.
+// Envelope open animation, ceremony media loader, music toggle.
 
 (() => {
   'use strict';
-
-  // ---- CONFIG -------------------------------------------------------------
-  // add_placeholder: replace with the family WhatsApp number (country code + number, no + or spaces).
-  const RSVP_WHATSAPP_NUMBER = '919876543210';
 
   const ACCENT = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#D4AF37';
   const PETAL_PALETTE = ['#E8963A', '#C9A227', ACCENT, '#B5442E'];
@@ -211,41 +207,6 @@
   }
 
   document.querySelectorAll('.media-slot').forEach(loadMediaSlot);
-
-  // ---- RSVP -> WHATSAPP ---------------------------------------------------
-  const rsvpForm = document.getElementById('rsvpForm');
-  const rsvpGuestsSelect = document.getElementById('rsvpGuests');
-  const rsvpAttendingRadios = document.querySelectorAll('input[name="attending"]');
-
-  // Guest count only makes sense if they're actually coming — hide it the
-  // moment "Regrets" is picked instead of asking a question that no longer applies.
-  function updateRsvpGuestsVisibility() {
-    const checked = document.querySelector('input[name="attending"]:checked');
-    const declining = checked && checked.value === 'Regretfully Declining';
-    if (rsvpGuestsSelect) rsvpGuestsSelect.classList.toggle('hidden', declining);
-  }
-  rsvpAttendingRadios.forEach((radio) => radio.addEventListener('change', updateRsvpGuestsVisibility));
-  updateRsvpGuestsVisibility();
-
-  if (rsvpForm) {
-    rsvpForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('rsvpName').value.trim();
-      const guests = rsvpGuestsSelect.value;
-      const attending = document.querySelector('input[name="attending"]:checked');
-      const status = attending ? attending.value : 'Joyfully Attending';
-      const isDeclining = status === 'Regretfully Declining';
-
-      const text = `॥ RSVP • #UPWAN ॥\n\nNamaste! This is *${name}*.\n` +
-        (isDeclining ? '' : `• Total Guests: ${guests || '1'}\n`) +
-        `• Status: ${status}\n\n` +
-        (isDeclining
-          ? `We'll miss celebrating with you, but thank you so much for letting us know!`
-          : `We are looking forward to celebrating Pawan & Upasana's Shubh Vivah!`);
-
-      window.open(`https://api.whatsapp.com/send?phone=${RSVP_WHATSAPP_NUMBER}&text=${encodeURIComponent(text)}`, '_blank');
-    });
-  }
 
   // ---- MUSIC TOGGLE ---------------------------------------------------------
   const musicBtn = document.getElementById('musicBtn');
@@ -507,7 +468,7 @@
     vivah: { title: 'Shubh Vivah — Pawan & Upasana', start: '2026-11-21T11:00:00+05:30', end: '2026-11-21T14:00:00+05:30' },
     reception: { title: 'Grand Reception — Pawan & Upasana', start: '2026-11-22T12:00:00+05:30', end: '2026-11-22T16:00:00+05:30' },
   };
-  // add_placeholder: swap in the real venue name/address if it differs from the Bhimtal hotel above.
+  // add_placeholder: fallback venue, only used if a scene has no .scene-address of its own.
   const VENUE_LOCATION = 'Hotel Neelesh Inn, Bhimtal Lake, Nainital District, Uttarakhand';
 
   function toGCalDate(iso) {
@@ -517,11 +478,16 @@
   document.querySelectorAll('.calendar-link').forEach((link) => {
     const event = CEREMONY_EVENTS[link.getAttribute('data-cal')];
     if (!event) return;
+    // Groom-side Haldi runs at a different venue than the rest of the ceremonies,
+    // so the calendar location is read from that scene's own .scene-address rather
+    // than a single site-wide constant.
+    const addressEl = link.closest('.scene')?.querySelector('.scene-address');
+    const location = addressEl?.textContent.trim() || VENUE_LOCATION;
     const params = new URLSearchParams({
       action: 'TEMPLATE',
       text: event.title,
       dates: `${toGCalDate(event.start)}/${toGCalDate(event.end)}`,
-      location: VENUE_LOCATION,
+      location,
       details: "Join us as we celebrate! #UPWAN",
     });
     link.href = `https://calendar.google.com/calendar/render?${params.toString()}`;
