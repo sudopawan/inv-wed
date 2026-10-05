@@ -481,15 +481,20 @@
   document.querySelectorAll('.calendar-link').forEach((link) => {
     const event = CEREMONY_EVENTS[link.getAttribute('data-cal')];
     if (!event) return;
-    // Groom-side Haldi runs at a different venue than the rest of the ceremonies,
-    // so the calendar location is read from that scene's own .scene-address rather
-    // than a single site-wide constant.
-    const addressEl = link.closest('.scene')?.querySelector('.scene-address');
+    // Some scenes run at a different venue and/or time than the rest of the
+    // ceremonies for a given audience (e.g. bride-side Haldi starts an hour
+    // later; groom-side Haldi is at a different venue) — a scene overrides
+    // either independently via data-start/data-end and .scene-address,
+    // falling back to the shared defaults when it doesn't.
+    const scene = link.closest('.scene');
+    const start = scene?.dataset.start || event.start;
+    const end = scene?.dataset.end || event.end;
+    const addressEl = scene?.querySelector('.scene-address');
     const location = addressEl?.textContent.trim() || VENUE_LOCATION;
     const params = new URLSearchParams({
       action: 'TEMPLATE',
       text: event.title,
-      dates: `${toGCalDate(event.start)}/${toGCalDate(event.end)}`,
+      dates: `${toGCalDate(start)}/${toGCalDate(end)}`,
       location,
       details: "Join us as we celebrate! #UPWAN",
     });
@@ -498,14 +503,18 @@
 
   // ---- PER-CEREMONY COUNTDOWNS (one on each scene, own target time) ---------
   const pad2 = (n) => String(n).padStart(2, '0');
-  const countdowns = Array.from(document.querySelectorAll('[data-countdown]')).map((el) => ({
-    el,
-    target: new Date(CEREMONY_EVENTS[el.getAttribute('data-countdown')]?.start).getTime(),
-    dEl: el.querySelector('[data-cd="d"]'),
-    hEl: el.querySelector('[data-cd="h"]'),
-    mEl: el.querySelector('[data-cd="m"]'),
-    sEl: el.querySelector('[data-cd="s"]'),
-  })).filter((cd) => !Number.isNaN(cd.target));
+  const countdowns = Array.from(document.querySelectorAll('[data-countdown]')).map((el) => {
+    const scene = el.closest('.scene');
+    const start = scene?.dataset.start || CEREMONY_EVENTS[el.getAttribute('data-countdown')]?.start;
+    return {
+      el,
+      target: new Date(start).getTime(),
+      dEl: el.querySelector('[data-cd="d"]'),
+      hEl: el.querySelector('[data-cd="h"]'),
+      mEl: el.querySelector('[data-cd="m"]'),
+      sEl: el.querySelector('[data-cd="s"]'),
+    };
+  }).filter((cd) => !Number.isNaN(cd.target));
 
   function tickCountdowns() {
     const now = Date.now();
