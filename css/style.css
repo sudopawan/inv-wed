@@ -249,6 +249,34 @@ h1, h2, h3, p {
 }
 .seal-halo.cracking { animation: none; opacity: 0; transition: opacity 0.2s ease; }
 
+/* Expanding rings, the "tap here" affordance — reads as a universal
+   tap-target convention (think Google Maps' pulsing location pin) without
+   needing any text. Two rings staggered half a cycle apart so one is always
+   mid-expansion. Hidden the instant the seal cracks open. */
+.seal-ripple-group {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+.seal-ripple-group.cracking { display: none; }
+.seal-ripple {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 112px; height: 112px;
+  margin: -56px 0 0 -56px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent);
+  opacity: 0;
+  animation: sealRipple 2.8s ease-out infinite;
+}
+.seal-ripple-2 { animation-delay: 1.4s; }
+@keyframes sealRipple {
+  0% { transform: scale(0.88); opacity: 0.6; }
+  65% { opacity: 0.12; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
 .seal-burst {
   position: absolute;
   left: 50%; top: 50%;
@@ -285,6 +313,12 @@ h1, h2, h3, p {
   cursor: pointer;
   padding: 0;
   z-index: 5;
+  animation: sealBreathe 2.8s ease-in-out infinite;
+}
+.seal-btn:hover { animation-play-state: paused; transform: scale(1.045); }
+@keyframes sealBreathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.045); }
 }
 .seal-btn.cracking {
   animation: sealGlow 1s ease-out 0.15s forwards;
@@ -390,8 +424,13 @@ h1, h2, h3, p {
   font: 400 12.5px 'Jost', sans-serif;
   color: rgba(246, 234, 208, 0.65);
   transition: opacity 0.3s ease;
+  animation: hintPulse 2.4s ease-in-out infinite;
 }
-.page1-hint.fade { opacity: 0; }
+@keyframes hintPulse {
+  0%, 100% { opacity: 0.5; transform: translateY(0); }
+  50% { opacity: 0.95; transform: translateY(-2px); }
+}
+.page1-hint.fade { opacity: 0; animation: none; }
 
 /* ==========================================================================
    Falling petals (shower on open) + greeting overlay

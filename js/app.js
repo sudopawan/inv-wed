@@ -12,6 +12,7 @@
   const glow = document.getElementById('envelopeGlow');
   const sealBtn = document.getElementById('sealBtn');
   const sealHalo = document.getElementById('sealHalo');
+  const sealRipple = document.getElementById('sealRipple');
   const sealBurst = document.getElementById('sealBurst');
   const sealParticles = document.getElementById('sealParticles');
   const page1Hint = document.getElementById('page1Hint');
@@ -30,6 +31,7 @@
 
     sealBtn.classList.add('cracking');
     sealHalo.classList.add('cracking');
+    sealRipple.classList.add('cracking');
     sealBurst.classList.add('cracking');
     spawnBurstParticles();
     page1Hint.classList.add('fade');
@@ -98,6 +100,7 @@
     greetingOverlay.classList.remove('fade-out');
     sealBtn.classList.remove('cracking');
     sealHalo.classList.remove('cracking');
+    sealRipple.classList.remove('cracking');
     sealBurst.classList.remove('cracking');
     page1Hint.classList.remove('fade');
     flap.classList.remove('opened');
